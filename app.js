@@ -401,6 +401,7 @@ function updateLanguage() {
   $('language').textContent = language === 'en' ? '中文' : 'English';
   $('language').setAttribute('aria-label',language === 'en' ? '切换到中文' : 'Switch to English');
   $('counts').textContent = `${count(counts.people,'personUnit')} · ${count(counts.bands,'bandUnit')} · ${count(relations.length,'edges')}`;
+  renderFilters();
   cy.batch(() => cy.nodes().forEach(node => node.data('name',displayName(artists[node.id()]))));
   updatePathOptions();
   const pathType = $('path-type');

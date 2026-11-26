@@ -3,7 +3,7 @@ import {createContext, runInContext} from 'node:vm';
 
 const root = new URL('../', import.meta.url);
 const context = createContext({});
-for (const name of ['catalog','lineups','connections','portraits','layout','locale']) {
+for (const name of ['catalog','lineups','connections','connections-musicbrainz','connections-research','portraits','layout','locale']) {
   const url = new URL(name+'.js',root);
   runInContext(readFileSync(url,'utf8'),context,{filename:url.pathname});
 }

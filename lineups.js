@@ -12,7 +12,7 @@ Television~Television (band)|美国|后朋克|电视乐队|Tom Verlaine;Richard 
 The Heartbreakers|美国|朋克摇滚||Johnny Thunders;Jerry Nolan;Richard Hell;Walter Lure
 New York Dolls|美国|华丽摇滚|纽约妞|David Johansen;Johnny Thunders;Jerry Nolan;Sylvain Sylvain;Arthur Kane;Billy Murcia
 The Damned~The Damned (band)|英国|朋克摇滚||Dave Vanian;Captain Sensible;Rat Scabies;Brian James~Brian James (guitarist);Algy Ward
-Buzzcocks|英国|朋克摇滚||Pete Shelley;Steve Diggle;Howard Devoto;John Maher~John Maher (musician);Steve Garvey~Steve Garvey (musician)
+Buzzcocks|英国|朋克摇滚||Pete Shelley;Steve Diggle;Howard Devoto;John Maher~John Maher (Buzzcocks drummer);Steve Garvey~Steve Garvey (musician)
 Magazine~Magazine (band)|英国|后朋克||Howard Devoto;John McGeoch;Barry Adamson;Dave Formula;John Doyle~John Doyle (drummer)
 Siouxsie and the Banshees|英国|后朋克||Siouxsie Sioux;Steven Severin;Budgie~Budgie (musician);John McGeoch;Robert Smith~Robert Smith (musician);John McKay~John McKay (musician)
 The Cure|英国|后朋克|治疗乐队|Robert Smith~Robert Smith (musician);Simon Gallup;Lol Tolhurst;Porl Thompson~Pearl Thompson;Boris Williams;Roger O'Donnell;Reeves Gabrels;Jason Cooper

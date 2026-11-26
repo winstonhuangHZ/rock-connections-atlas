@@ -4,7 +4,7 @@ const cytoscape = require('cytoscape');
 cytoscape.use(require('cytoscape-fcose'));
 const directory = require('node:path').resolve(__dirname,'..')+'/';
 const context = {};
-for (const file of ['catalog','lineups','connections']) {
+for (const file of ['catalog','lineups','connections','connections-musicbrainz','connections-research']) {
   vm.runInNewContext(fs.readFileSync(directory+file+'.js','utf8'),context);
 }
 const {artists,relations,sources,types} = vm.runInNewContext('({artists,relations,sources,types})',context);
