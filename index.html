@@ -6,7 +6,7 @@
   <meta name="description" content="沿着乐队、录音与音乐影响，探索摇滚音乐人之间的关系。">
   <meta name="page-type" content="app">
   <meta name="site-kind" content="interactive archive">
-  <meta name="theme-color" content="#f4f5f2">
+  <meta name="theme-color" content="#f2efe8">
   <title>Rock Connections Atlas</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="fonts/fonts.css">
@@ -20,7 +20,7 @@
   <script defer src="vendor/cytoscape.min.js"></script>
   <script defer src="layout.js"></script>
   <script defer src="locale.js"></script>
-  <script defer src="app.js?v=2"></script>
+  <script defer src="app.js?v=3"></script>
 </head>
 <body>
   <header class="masthead">
@@ -36,7 +36,8 @@
   </header>
   <main class="wrap">
     <section class="intro" aria-labelledby="page-title">
-      <div>
+      <div class="intro-copy">
+        <span class="eyebrow" data-copy="eyebrow">ARCHIVAL CARTOGRAPHY · 1955–2026</span>
         <h1 id="page-title" data-copy="title">Rock Connections Atlas</h1>
         <p data-copy="subtitle">Trace relationships through bands, recordings, and musical influence.</p>
       </div>
@@ -54,12 +55,19 @@
     <section id="map" aria-label="关系图谱">
       <div class="workspace" id="workspace">
         <section class="network" aria-label="关系网络">
-          <div class="network-top"><h2 data-copy="network">Relationship network</h2><span id="network-count" aria-live="polite"></span></div>
+          <div class="network-top">
+            <div class="network-title">
+              <span class="live" aria-hidden="true"></span>
+              <h2 data-copy="network">Relationship network</h2>
+              <span class="network-legend" data-copy="legend">● Person   ◆ Band</span>
+            </div>
+            <span id="network-count" aria-live="polite"></span>
+          </div>
           <div id="graph" class="graph" aria-label="可点击的音乐人关系图。也可通过搜索与人物索引访问所有条目。"></div>
           <div class="network-tools">
             <div id="filters" class="filters" role="group" aria-label="按关系筛选"></div>
             <div class="zoom" role="group" aria-label="图谱缩放">
-              <button id="zoom-out" aria-label="缩小">−</button><button id="zoom-reset" data-copy="fit" aria-label="Fit network">Fit</button><button id="zoom-in" aria-label="放大">＋</button>
+              <button id="zoom-out" type="button" aria-label="缩小">−</button><button id="zoom-reset" type="button" data-copy="fit" aria-label="Fit network">Fit</button><button id="zoom-in" type="button" aria-label="放大">＋</button>
             </div>
           </div>
         </section>
@@ -69,11 +77,21 @@
 
     <section id="directory" aria-labelledby="directory-title" hidden>
       <div class="section-head">
-        <h2 id="directory-title" data-copy="indexTitle">Artist and band index</h2>
-        <div class="segments" role="group" aria-label="索引类型">
-          <button type="button" data-kind="all" data-copy="all" aria-pressed="true">All</button>
-          <button type="button" data-kind="artist" data-copy="artists" aria-pressed="false">People</button>
-          <button type="button" data-kind="band" data-copy="bands" aria-pressed="false">Bands</button>
+        <div class="section-title-group">
+          <h2 id="directory-title" data-copy="indexTitle">Artist and band index</h2>
+          <span id="directory-count" class="section-meta" aria-live="polite"></span>
+        </div>
+        <div class="directory-controls">
+          <div class="segments" role="group" aria-label="索引排序" data-role="sort">
+            <button type="button" data-sort="featured" data-copy="sortFeatured" aria-pressed="true">Curated</button>
+            <button type="button" data-sort="degree" data-copy="sortConnections" aria-pressed="false">Most connected</button>
+            <button type="button" data-sort="alpha" data-copy="sortAlpha" aria-pressed="false">A–Z</button>
+          </div>
+          <div class="segments" role="group" aria-label="索引类型" data-role="kind">
+            <button type="button" data-kind="all" data-copy="all" aria-pressed="true">All</button>
+            <button type="button" data-kind="artist" data-copy="artists" aria-pressed="false">People</button>
+            <button type="button" data-kind="band" data-copy="bands" aria-pressed="false">Bands</button>
+          </div>
         </div>
       </div>
       <div id="directory-grid" class="directory-grid"></div>
@@ -94,7 +112,7 @@
   </main>
   <footer class="wrap footer">
     <span data-copy="foot">Sources are linked from each relationship. Image credits appear on profiles.</span>
-    <span data-copy="legend">● Person &nbsp; ◆ Band</span>
+    <span data-copy="shape">● Person &nbsp; ◆ Band</span>
   </footer>
 
   <dialog id="relation-dialog" aria-labelledby="dialog-title">

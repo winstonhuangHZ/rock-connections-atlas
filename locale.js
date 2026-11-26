@@ -1,6 +1,6 @@
 const strings = {
   en: {
-    brand:'Rock Atlas',title:'Rock Connections Atlas',subtitle:'Trace relationships through bands, recordings, and musical influence.',
+    brand:'Rock Atlas',eyebrow:'ARCHIVAL CARTOGRAPHY · 1955–2026',title:'Rock Connections Atlas',subtitle:'Trace relationships through bands, recordings, and musical influence.',
     map:'Network',directory:'Index',paths:'Find a path',network:'Relationship network',
     all:'All',artists:'People',bands:'Bands',indexTitle:'Artist and band index',pathTitle:'Find a connection',from:'From',to:'To',
     foot:'Sources are linked from each relationship. Image credits appear on profiles.',legend:'● Person   ◆ Band',
@@ -12,10 +12,10 @@ const strings = {
     member:'Band membership',record:'Recording & performance',personal:'Personal contact',family:'Family',influence:'Influence & references',
     searchRegion:'Search',graphRegion:'Interactive relationship graph. Every entry is also available through search and the index.',
     filters:'Filter by relationship',zoom:'Graph zoom',indexFilter:'Index filter',navigation:'Main navigation',photo:'Photograph of',
-    shape:'● Person   ◆ Band'
+    shape:'● Person   ◆ Band',sortFeatured:'Curated',sortConnections:'Most connected',sortAlpha:'A–Z',indexSort:'Sort index',sortFeatured:'Curated',sortConnections:'Most connected',sortAlpha:'A–Z',indexSort:'Sort index'
   },
   zh: {
-    brand:'摇滚图谱',title:'摇滚关系图谱',subtitle:'循着乐队、录音与音乐影响，探索摇滚史上的人物关系。',
+    brand:'摇滚图谱',eyebrow:'摇滚史关系档案与图谱 · 1955–2026',title:'摇滚关系图谱',subtitle:'循着乐队、录音与音乐影响，探索摇滚史上的人物关系。',
     map:'关系图谱',directory:'人物索引',paths:'查找路径',network:'关系网络',
     all:'全部',artists:'人物',bands:'乐队',indexTitle:'人物与乐队索引',pathTitle:'查找两者之间的路径',from:'起点',to:'终点',
     foot:'关系附有出处。肖像署名见人物页。',legend:'● 人物   ◆ 乐队',
@@ -27,7 +27,7 @@ const strings = {
     member:'乐队与成员',record:'录音与演出',personal:'交往与相识',family:'亲属关系',influence:'影响与致敬',
     searchRegion:'搜索',graphRegion:'交互式关系图。所有条目也可以通过搜索和人物索引访问。',
     filters:'按关系筛选',zoom:'图谱缩放',indexFilter:'索引类型',navigation:'主导航',photo:'照片',
-    shape:'● 人物   ◆ 乐队'
+    shape:'● 人物   ◆ 乐队',sortFeatured:'精选导览',sortConnections:'关联最多',sortAlpha:'姓名 A–Z',indexSort:'索引排序',sortFeatured:'精选导览',sortConnections:'关联最多',sortAlpha:'姓名 A–Z',indexSort:'索引排序'
   }
 };
 
