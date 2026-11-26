@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-type="app">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="沿着乐队、录音与音乐影响，探索摇滚音乐人之间的关系。">
+  <meta name="page-type" content="app">
+  <meta name="site-kind" content="interactive archive">
+  <meta name="theme-color" content="#f4f5f2">
+  <title>Rock Connections Atlas</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="catalog.js"></script>
+  <script defer src="lineups.js"></script>
+  <script defer src="connections.js"></script>
+  <script defer src="portraits.js"></script>
+  <script defer src="vendor/cytoscape.min.js"></script>
+  <script defer src="layout.js"></script>
+  <script defer src="locale.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap head-inner">
+      <a class="brand" href="#map" data-copy="brand">Rock Atlas</a>
+      <nav aria-label="主导航">
+        <a href="#map" data-tab="map" data-copy="map">Network</a>
+        <a href="#directory" data-tab="directory" data-copy="directory">Index</a>
+        <a href="#paths" data-tab="paths" data-copy="paths">Find a path</a>
+      </nav>
+      <button id="language" class="language" type="button" lang="zh-CN" aria-label="切换到中文">中文</button>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title" data-copy="title">Rock Connections Atlas</h1>
+        <p data-copy="subtitle">Trace relationships through bands, recordings, and musical influence.</p>
+      </div>
+      <div class="intro-right">
+        <form id="search" role="search">
+          <span class="lens" aria-hidden="true"></span>
+          <input id="query" type="search" placeholder="搜索 Nico、Oasis、披头士…" aria-label="搜索音乐人或乐队" autocomplete="off" aria-controls="search-results">
+          <kbd aria-hidden="true">/</kbd>
+          <div id="search-results" class="search-results" hidden></div>
+        </form>
+        <div class="counts" id="counts"></div>
+      </div>
+    </section>
+
+    <section id="map" aria-label="关系图谱">
+      <div class="workspace" id="workspace">
+        <section class="network" aria-label="关系网络">
+          <div class="network-top"><h2 data-copy="network">Relationship network</h2><span id="network-count" aria-live="polite"></span></div>
+          <div id="graph" class="graph" aria-label="可点击的音乐人关系图。也可通过搜索与人物索引访问所有条目。"></div>
+          <div class="network-tools">
+            <div id="filters" class="filters" role="group" aria-label="按关系筛选"></div>
+            <div class="zoom" role="group" aria-label="图谱缩放">
+              <button id="zoom-out" aria-label="缩小">−</button><button id="zoom-reset" data-copy="fit" aria-label="Fit network">Fit</button><button id="zoom-in" aria-label="放大">＋</button>
+            </div>
+          </div>
+        </section>
+        <aside id="profile" class="profile" aria-label="音乐人详情" hidden></aside>
+      </div>
+    </section>
+
+    <section id="directory" aria-labelledby="directory-title" hidden>
+      <div class="section-head">
+        <h2 id="directory-title" data-copy="indexTitle">Artist and band index</h2>
+        <div class="segments" role="group" aria-label="索引类型">
+          <button type="button" data-kind="all" data-copy="all" aria-pressed="true">All</button>
+          <button type="button" data-kind="artist" data-copy="artists" aria-pressed="false">People</button>
+          <button type="button" data-kind="band" data-copy="bands" aria-pressed="false">Bands</button>
+        </div>
+      </div>
+      <div id="directory-grid" class="directory-grid"></div>
+    </section>
+
+    <section id="paths" aria-labelledby="paths-title" hidden>
+      <div class="section-head"><h2 id="paths-title" data-copy="pathTitle">Find a connection</h2></div>
+      <div class="path-panel">
+        <form id="path-form" class="path-form">
+          <label><span data-copy="from">From</span><select id="path-from"></select></label>
+          <label><span data-copy="to">To</span><select id="path-to"></select></label>
+          <label><span data-copy="relationType">Relationship type</span><select id="path-type"></select></label>
+          <button class="primary" type="submit" data-copy="paths">Find a path</button>
+        </form>
+        <div id="path-results" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap footer">
+    <span data-copy="foot">Sources are linked from each relationship. Image credits appear on profiles.</span>
+    <span data-copy="legend">● Person &nbsp; ◆ Band</span>
+  </footer>
+
+  <dialog id="relation-dialog" aria-labelledby="dialog-title">
+    <button type="button" class="close" aria-label="关闭">×</button>
+    <div id="dialog-content"></div>
+  </dialog>
+</body>
+</html>
