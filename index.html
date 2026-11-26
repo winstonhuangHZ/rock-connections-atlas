@@ -20,7 +20,7 @@
   <script defer src="vendor/cytoscape.min.js"></script>
   <script defer src="layout.js"></script>
   <script defer src="locale.js"></script>
-  <script defer src="app.js?v=3"></script>
+  <script defer src="app.js?v=4"></script>
 </head>
 <body>
   <header class="masthead">
@@ -101,9 +101,26 @@
       <div class="section-head"><h2 id="paths-title" data-copy="pathTitle">Find a connection</h2></div>
       <div class="path-panel">
         <form id="path-form" class="path-form">
-          <label><span data-copy="from">From</span><select id="path-from"></select></label>
-          <label><span data-copy="to">To</span><select id="path-to"></select></label>
-          <label><span data-copy="relationType">Relationship type</span><select id="path-type"></select></label>
+          <div class="path-field" data-picker="from">
+            <label for="path-from-query" data-copy="from">From</label>
+            <div class="path-combobox">
+              <span class="lens" aria-hidden="true"></span>
+              <input id="path-from-query" class="path-query" type="search" autocomplete="off" aria-controls="path-from-results" aria-expanded="false">
+              <input id="path-from" type="hidden" value="lou">
+              <div id="path-from-results" class="path-dropdown" role="listbox" hidden></div>
+            </div>
+          </div>
+          <button id="path-swap" class="path-swap" type="button" aria-label="交换起点与终点" title="Swap">⇄</button>
+          <div class="path-field" data-picker="to">
+            <label for="path-to-query" data-copy="to">To</label>
+            <div class="path-combobox">
+              <span class="lens" aria-hidden="true"></span>
+              <input id="path-to-query" class="path-query" type="search" autocomplete="off" aria-controls="path-to-results" aria-expanded="false">
+              <input id="path-to" type="hidden" value="rivers">
+              <div id="path-to-results" class="path-dropdown" role="listbox" hidden></div>
+            </div>
+          </div>
+          <label class="path-field"><span data-copy="relationType">Relationship type</span><select id="path-type"></select></label>
           <button class="primary" type="submit" data-copy="paths">Find a path</button>
         </form>
         <div id="path-results" aria-live="polite"></div>

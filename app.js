@@ -123,6 +123,10 @@ searchResults.addEventListener('click',event => {
 });
 document.addEventListener('pointerdown',event => {
   if (!$('search').contains(event.target)) searchResults.hidden = true;
+  for (const role of ['from', 'to']) {
+    const picker = document.querySelector(`[data-picker="${role}"]`);
+    if (picker && !picker.contains(event.target)) closePathPicker(role);
+  }
 });
 document.addEventListener('keydown',event => {
   if (event.key === 'Escape') searchResults.hidden = true;
@@ -362,13 +366,118 @@ function shortestPath(from,to,type) {
   }
   return steps;
 }
+const defaultPathSuggestions = [
+  ...['lou','rivers','dylan','beatles','bowie','queen','nirvana','oasis','the-clash','zeppelin','pink-floyd','metallica','radiohead','no-party-for-cao-dong','chuck-berry']
+    .filter(id => artists[id]).map(id => artists[id]),
+  ...entries
+].filter((person, index, list) => list.indexOf(person) === index);
+
+function setPathEndpoint(role, id) {
+  const hidden = $('path-' + role);
+  const input = $('path-' + role + '-query');
+  const dropdown = $('path-' + role + '-results');
+  if (!artists[id]) return;
+  hidden.value = id;
+  input.value = displayName(artists[id]);
+  dropdown.hidden = true;
+  input.setAttribute('aria-expanded', 'false');
+}
+
+function renderPathPicker(role, filterText = '') {
+  const hidden = $('path-' + role);
+  const input = $('path-' + role + '-query');
+  const dropdown = $('path-' + role + '-results');
+  const term = filterText.trim();
+  const matches = (term ? searchMatches(term) : defaultPathSuggestions).slice(0, 24);
+  dropdown.innerHTML = matches.length
+    ? matches.map((person, idx) => `<button type="button" role="option" class="path-option${person.id === hidden.value ? ' is-selected' : ''}${idx === 0 ? ' is-active' : ''}" data-role="${role}" data-id="${person.id}">${avatar(person)}<span><strong>${escapeHTML(displayName(person))}</strong><small>${escapeHTML(displayScene(person))} · ${count(byArtist[person.id].length,'edges')}</small></span></button>`).join('')
+    : `<p class="path-empty">${t('noResults')}</p>`;
+  dropdown.hidden = false;
+  input.setAttribute('aria-expanded', 'true');
+  return matches;
+}
+
+function closePathPicker(role) {
+  const hidden = $('path-' + role);
+  const input = $('path-' + role + '-query');
+  const dropdown = $('path-' + role + '-results');
+  if (!dropdown) return;
+  dropdown.hidden = true;
+  input.setAttribute('aria-expanded', 'false');
+  if (artists[hidden.value]) input.value = displayName(artists[hidden.value]);
+}
+
+for (const role of ['from', 'to']) {
+  const input = $('path-' + role + '-query');
+  const dropdown = $('path-' + role + '-results');
+  input.addEventListener('focus', () => {
+    closePathPicker(role === 'from' ? 'to' : 'from');
+    input.select();
+    renderPathPicker(role, '');
+  });
+  input.addEventListener('input', () => {
+    renderPathPicker(role, input.value);
+  });
+  input.addEventListener('keydown', event => {
+    const options = [...dropdown.querySelectorAll('.path-option')];
+    const currentIdx = options.findIndex(el => el.classList.contains('is-active'));
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (dropdown.hidden) { renderPathPicker(role, ''); return; }
+      if (!options.length) return;
+      const nextIdx = (currentIdx + 1) % options.length;
+      options.forEach((el, i) => el.classList.toggle('is-active', i === nextIdx));
+      options[nextIdx].scrollIntoView({ block: 'nearest' });
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (dropdown.hidden || !options.length) return;
+      const nextIdx = (currentIdx - 1 + options.length) % options.length;
+      options.forEach((el, i) => el.classList.toggle('is-active', i === nextIdx));
+      options[nextIdx].scrollIntoView({ block: 'nearest' });
+    } else if (event.key === 'Enter') {
+      if (!dropdown.hidden) {
+        event.preventDefault();
+        const active = dropdown.querySelector('.path-option.is-active') || options[0];
+        if (active) {
+          setPathEndpoint(role, active.dataset.id);
+          renderPath();
+        }
+      }
+    } else if (event.key === 'Escape') {
+      closePathPicker(role);
+      input.blur();
+    }
+  });
+  dropdown.addEventListener('pointerdown', event => {
+    const btn = event.target.closest('.path-option');
+    if (!btn) return;
+    event.preventDefault();
+    setPathEndpoint(role, btn.dataset.id);
+    renderPath();
+  });
+}
+
+$('path-swap').addEventListener('click', () => {
+  const fromId = $('path-from').value;
+  const toId = $('path-to').value;
+  setPathEndpoint('from', toId);
+  setPathEndpoint('to', fromId);
+  renderPath();
+});
+
 function updatePathOptions() {
-  const options = entries.map(person => `<option value="${person.id}">${escapeHTML(displayName(person))}</option>`).join('');
-  for (const [control,fallback] of [['path-from','lou'],['path-to','rivers']]) {
-    const select = $(control);
-    const previous = select.value || fallback;
-    select.innerHTML = options;
-    select.value = previous;
+  for (const [role, fallback] of [['from', 'lou'], ['to', 'rivers']]) {
+    const hidden = $('path-' + role);
+    const input = $('path-' + role + '-query');
+    const id = artists[hidden.value] ? hidden.value : fallback;
+    hidden.value = id;
+    input.value = displayName(artists[id]);
+    input.placeholder = t('pathSearchPlaceholder');
+  }
+  const swap = $('path-swap');
+  if (swap) {
+    swap.setAttribute('aria-label', t('swapEndpoints'));
+    swap.title = t('swapEndpoints');
   }
 }
 function renderPath() {
@@ -384,7 +493,21 @@ function renderPath() {
       `<li>${stepLink(id)}<button type="button" data-edge="${edge.index}">${t(edge.type)} · ${escapeHTML(displayStory(edge).title)}</button></li>`
     ).join('')}</ol>`;
 }
-$('path-form').addEventListener('submit',event => { event.preventDefault(); renderPath(); });
+$('path-form').addEventListener('submit',event => {
+  event.preventDefault();
+  for (const role of ['from', 'to']) {
+    const input = $('path-' + role + '-query');
+    const hidden = $('path-' + role);
+    const typed = input.value.trim();
+    if (typed && typed !== displayName(artists[hidden.value])) {
+      const [match] = searchMatches(typed);
+      if (match) setPathEndpoint(role, match.id);
+    }
+    closePathPicker(role);
+  }
+  renderPath();
+});
+$('path-type').addEventListener('change', renderPath);
 
 function route() {
   const [name,id] = location.hash.slice(1).split('/');

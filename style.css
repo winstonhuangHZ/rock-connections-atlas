@@ -698,25 +698,126 @@ kbd {
 }
 .path-form {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1.15fr) auto minmax(0, 1.15fr) minmax(0, 0.9fr) auto;
   align-items: end;
-  gap: 18px;
+  gap: 14px;
 }
-.path-form label {
+.path-field {
   display: grid;
   gap: 8px;
+  min-width: 0;
+}
+.path-field > label, .path-field > span {
   font: 600 12.5px var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--dim);
 }
+.path-combobox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  position: relative;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  padding: 0 12px;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.path-combobox:focus-within {
+  border-color: var(--ink);
+  background: var(--lift);
+  box-shadow: 0 4px 14px rgba(23, 30, 31, 0.07);
+}
+.path-query {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 600 15px var(--body);
+}
+.path-query:focus-visible { outline: none; }
+.path-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: -1px;
+  right: -1px;
+  z-index: 15;
+  background: var(--lift);
+  max-height: 310px;
+  overflow: auto;
+  border: 1px solid var(--ink);
+  box-shadow: 0 14px 32px var(--shadow);
+}
+.path-option {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
+  text-align: left;
+}
+.path-option:hover, .path-option.is-active {
+  background: var(--paper);
+}
+.path-option.is-selected {
+  border-left: 3px solid var(--signal);
+  padding-left: 9px;
+}
+.path-option span {
+  min-width: 0;
+  flex: 1;
+}
+.path-option strong, .path-option small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.path-option strong {
+  font: 600 14.5px var(--display);
+}
+.path-option small {
+  color: var(--dim);
+  font: 11.5px var(--mono);
+}
+.path-empty {
+  margin: 0;
+  padding: 13px;
+  color: var(--dim);
+  font-size: 13.5px;
+}
+.path-swap {
+  height: 42px;
+  width: 42px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink);
+  font: 600 16px/1 var(--mono);
+  display: grid;
+  place-items: center;
+  transition: all 0.15s ease;
+}
+.path-swap:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--lift);
+}
 .path-form select {
   width: 100%;
+  height: 42px;
   font: 400 15px var(--body);
-  padding: 9px 12px;
+  padding: 0 12px;
+  background: var(--paper);
 }
 .path-form .primary {
-  height: 41px;
+  height: 42px;
   padding-inline: 20px;
 }
 #path-results > p {
@@ -842,8 +943,15 @@ dialog a { color: var(--signal); }
   .connections { max-height: none; }
   .section-head { flex-direction: column; align-items: flex-start; }
 }
+@media (max-width: 860px) {
+  .path-form { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 12px; }
+  .path-form > label.path-field { grid-column: 1 / 3; }
+  .path-form > .primary { grid-column: 3 / 4; }
+}
 @media (max-width: 690px) {
-  .path-form { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .path-form { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .path-form > label.path-field, .path-form > .primary { grid-column: auto; }
+  .path-swap { width: 100%; height: 34px; }
   .directory-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 14px; }
 }
 @media (max-width: 480px) {
