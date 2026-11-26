@@ -14,6 +14,7 @@ const initialType = 'all';
 let selected = null;
 let filter = initialType;
 let category = 'all';
+let sortMode = 'featured';
 const typeEntries = Object.entries(types);
 let language = 'en';
 try { if (localStorage.getItem('rock-atlas.language') === 'zh') language = 'zh'; } catch {}
@@ -184,7 +185,7 @@ const cy = cytoscape({
     ...entries.map(person => ({
       data: {id:person.id,name:displayName(person)},
       position: atlasPositions[person.id],
-      classes: [isBand(person) ? 'band' : 'artist', landmarks.has(person.id) ? 'landmark' : ''].join(' ')
+      classes: [isBand(person) ? 'band' : 'artist', landmarks.has(person.id) ? 'landmark' : byArtist[person.id].length >= 6 ? 'hub' : byArtist[person.id].length === 1 ? 'leaf' : ''].filter(Boolean).join(' ')
     })),
     ...relations.map(edge => ({
       data: {id:'edge-'+edge.index,source:edge.a,target:edge.b,index:edge.index},
@@ -194,24 +195,27 @@ const cy = cytoscape({
   layout: {name:'preset',fit:false},
   style: [
     {selector:'node',style:{
-      width:14,height:14,'background-color':color('node'),label:'data(name)',
-      'font-family':'Georgia, Songti SC, serif','font-size':14,color:color('white'),'text-margin-y':-5,
-      'text-background-color':color('dark'),'text-background-opacity':.88,'text-background-padding':2,
-      'min-zoomed-font-size':10,'overlay-opacity':0
+      width:13,height:13,'background-color':color('node'),label:'data(name)',
+      'font-family':'Spectral, Georgia, Songti SC, serif','font-size':13.5,color:color('white'),'text-margin-y':-6,
+      'text-background-color':color('dark'),'text-background-opacity':.9,'text-background-padding':2.5,
+      'min-zoomed-font-size':11.5,'overlay-opacity':0
     }},
-    {selector:'.band',style:{shape:'diamond',width:25,height:25,'background-color':color('accent')}},
-    {selector:'.landmark',style:{width:27,height:27,'font-size':39,'font-weight':700,'min-zoomed-font-size':6}},
-    {selector:'edge',style:{width:1.65,'curve-style':'straight',opacity:.63,'overlay-opacity':0,'line-color':color('record')}},
+    {selector:'.leaf',style:{width:11,height:11,'font-size':12.5,'min-zoomed-font-size':14.5}},
+    {selector:'.band',style:{shape:'diamond',width:24,height:24,'background-color':color('accent'),'font-size':15,'font-weight':600,'min-zoomed-font-size':8.5}},
+    {selector:'.hub',style:{width:20,height:20,'font-size':18,'font-weight':600,'min-zoomed-font-size':7}},
+    {selector:'.band.hub',style:{width:28,height:28,'font-size':19,'font-weight':600,'min-zoomed-font-size':6.8}},
+    {selector:'.landmark',style:{width:30,height:30,'font-size':32,'font-weight':700,'min-zoomed-font-size':4.8,'border-width':2,'border-color':color('dark')}},
+    {selector:'edge',style:{width:1.45,'curve-style':'straight',opacity:.52,'overlay-opacity':0,'line-color':color('record')}},
     ...typeEntries.map(([type]) => ({selector:'edge.'+type,style:{'line-color':color(type)}})),
     {selector:'edge.parallel',style:{'curve-style':'bezier'}},
     {selector:'edge.filtered',style:{display:'none'}},
-    {selector:'.muted',style:{opacity:.23}},
-    {selector:'edge.related',style:{opacity:1,width:3}},
-    {selector:'node.related',style:{'border-width':2,'border-color':color('accent')}},
-    {selector:'node.active-node',style:{'border-width':4,'border-color':color('white'),'background-color':color('accent')}},
-    {selector:'node.hovered',style:{'z-index':10,'min-zoomed-font-size':0,'font-size':24,'font-weight':700,
-      'border-width':2,'border-color':color('white')}},
-    {selector:'edge.hovered',style:{opacity:1,width:4}}
+    {selector:'.muted',style:{opacity:.18}},
+    {selector:'edge.related',style:{opacity:1,width:2.8}},
+    {selector:'node.related',style:{'min-zoomed-font-size':0,'font-size':17,'font-weight':600,'border-width':2,'border-color':color('accent')}},
+    {selector:'node.active-node',style:{'min-zoomed-font-size':0,'font-size':24,'font-weight':700,'border-width':4,'border-color':color('white'),'background-color':color('accent')}},
+    {selector:'node.hovered',style:{'z-index':10,'min-zoomed-font-size':0,'font-size':22,'font-weight':700,
+      'border-width':2.5,'border-color':color('white')}},
+    {selector:'edge.hovered',style:{opacity:1,width:3.6}}
   ],
   minZoom:.025,maxZoom:3.4,
   autoungrabify:true,autounselectify:true,boxSelectionEnabled:false
@@ -294,16 +298,46 @@ dialog.addEventListener('click',event => {
 
 function renderDirectory() {
   const shown = entries.filter(person => category === 'all' || (category === 'band') === isBand(person))
-    .sort((a,b) => Number(preferred.has(b.id))-Number(preferred.has(a.id)));
-  $('directory-grid').innerHTML = shown.map(person => `<a class="artist-card" href="${mapLink(person.id)}">
-    ${avatar(person)}<strong>${escapeHTML(displayName(person))}</strong><small>${escapeHTML(displayScene(person))} · ${count(byArtist[person.id].length,'edges')}</small></a>`).join('');
+    .sort((a,b) => {
+      if (sortMode === 'degree') {
+        return byArtist[b.id].length - byArtist[a.id].length || displayName(a).localeCompare(displayName(b), language === 'en' ? 'en' : 'zh-CN');
+      }
+      if (sortMode === 'alpha') {
+        return displayName(a).localeCompare(displayName(b), language === 'en' ? 'en' : 'zh-CN');
+      }
+      return Number(preferred.has(b.id)) - Number(preferred.has(a.id))
+        || Number(Boolean(portraits[b.id])) - Number(Boolean(portraits[a.id]))
+        || byArtist[b.id].length - byArtist[a.id].length
+        || displayName(a).localeCompare(displayName(b), language === 'en' ? 'en' : 'zh-CN');
+    });
+  const meta = $('directory-count');
+  if (meta) {
+    const unit = category === 'band' ? 'bandUnit' : category === 'artist' ? 'personUnit' : 'nodes';
+    meta.textContent = count(shown.length, unit);
+  }
+  $('directory-grid').innerHTML = shown.map(person => {
+    const hasPhoto = Boolean(portraits[person.id]);
+    const badge = isBand(person) ? t('bands') : t('artists');
+    const bio = displayBio(person);
+    return `<a class="artist-card${hasPhoto ? ' has-photo' : ''}" href="${mapLink(person.id)}">
+      <div class="card-media">${avatar(person)}<span class="card-badge">${escapeHTML(badge)}</span><span class="card-degree">${count(byArtist[person.id].length,'edges')}</span></div>
+      <div class="card-body"><strong>${escapeHTML(displayName(person))}</strong><small>${escapeHTML(displayScene(person))}</small>${bio ? `<p class="card-bio">${escapeHTML(bio)}</p>` : ''}</div></a>`;
+  }).join('');
 }
 $('directory').addEventListener('click',event => {
-  const button = event.target.closest('[data-kind]');
-  if (!button) return;
-  category = button.dataset.kind;
-  $('directory').querySelectorAll('[data-kind]').forEach(item => item.setAttribute('aria-pressed',item === button));
-  renderDirectory();
+  const kindBtn = event.target.closest('[data-kind]');
+  if (kindBtn) {
+    category = kindBtn.dataset.kind;
+    $('directory').querySelectorAll('[data-kind]').forEach(item => item.setAttribute('aria-pressed',item === kindBtn));
+    renderDirectory();
+    return;
+  }
+  const sortBtn = event.target.closest('[data-sort]');
+  if (sortBtn) {
+    sortMode = sortBtn.dataset.sort;
+    $('directory').querySelectorAll('[data-sort]').forEach(item => item.setAttribute('aria-pressed',item === sortBtn));
+    renderDirectory();
+  }
 });
 
 function shortestPath(from,to,type) {
@@ -393,7 +427,7 @@ function updateLanguage() {
   const labels = {
     'nav':'navigation','#search':'searchRegion','#query':'search','#graph':'graphRegion','#filters':'filters',
     '.zoom':'zoom','#zoom-in':'zoomIn','#zoom-out':'zoomOut','#zoom-reset':'fit','#profile':'profile',
-    '#directory .segments':'indexFilter','#relation-dialog .close':'close','#map':'map','.network':'network'
+    '#directory [data-role="kind"]':'indexFilter','#directory [data-role="sort"]':'indexSort','#relation-dialog .close':'close','#map':'map','.network':'network'
   };
   for (const [selector,key] of Object.entries(labels)) document.querySelector(selector).setAttribute('aria-label',t(key));
   query.placeholder = t('placeholder');
