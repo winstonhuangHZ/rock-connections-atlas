@@ -376,9 +376,11 @@ function setPathEndpoint(role, id) {
   const hidden = $('path-' + role);
   const input = $('path-' + role + '-query');
   const dropdown = $('path-' + role + '-results');
+  const badge = $('path-' + role + '-avatar');
   if (!artists[id]) return;
   hidden.value = id;
   input.value = displayName(artists[id]);
+  if (badge) badge.innerHTML = avatar(artists[id]);
   dropdown.hidden = true;
   input.setAttribute('aria-expanded', 'false');
 }
@@ -469,10 +471,12 @@ function updatePathOptions() {
   for (const [role, fallback] of [['from', 'lou'], ['to', 'rivers']]) {
     const hidden = $('path-' + role);
     const input = $('path-' + role + '-query');
+    const badge = $('path-' + role + '-avatar');
     const id = artists[hidden.value] ? hidden.value : fallback;
     hidden.value = id;
     input.value = displayName(artists[id]);
     input.placeholder = t('pathSearchPlaceholder');
+    if (badge) badge.innerHTML = avatar(artists[id]);
   }
   const swap = $('path-swap');
   if (swap) {
@@ -485,13 +489,17 @@ function renderPath() {
   const to = $('path-to').value;
   const result = $('path-results');
   const path = shortestPath(from,to,$('path-type').value);
-  if (!path) { result.innerHTML = `<p>${t('noPath')}</p>`; return; }
-  if (!path.length) { result.innerHTML = `<p>${t('samePath')}</p>`; return; }
-  const stepLink = id => `<a href="${mapLink(id)}">${escapeHTML(displayName(artists[id]))}</a>`;
-  result.innerHTML = `<p>${t('shortest')} · ${count(path.length,'edges')}</p>
-    <ol class="path-list"><li>${stepLink(from)}</li>${path.map(([id,edge]) =>
-      `<li>${stepLink(id)}<button type="button" data-edge="${edge.index}">${t(edge.type)} · ${escapeHTML(displayStory(edge).title)}</button></li>`
-    ).join('')}</ol>`;
+  if (!path) { result.innerHTML = `<p class="path-summary">${t('noPath')}</p>`; return; }
+  if (!path.length) { result.innerHTML = `<p class="path-summary">${t('samePath')}</p>`; return; }
+  const stepNode = (id, stepNum) => {
+    const p = artists[id];
+    return `<a class="path-node" href="${mapLink(id)}"><span class="path-index">${String(stepNum).padStart(2,'0')}</span>${avatar(p)}<span class="path-node-text"><strong>${escapeHTML(displayName(p))}</strong><small>${escapeHTML(displayScene(p))}</small></span></a>`;
+  };
+  result.innerHTML = `<div class="path-summary-bar"><span>${t('shortest')}</span><b>${count(path.length,'edges')}</b></div>
+    <ol class="path-list"><li class="path-step is-origin">${stepNode(from, 1)}<span class="path-origin-tag">${escapeHTML(t('from'))}</span></li>${path.map(([id,edge], idx) => {
+      const story = displayStory(edge);
+      return `<li class="path-step">${stepNode(id, idx + 2)}<button class="path-edge-btn" type="button" data-edge="${edge.index}"><i class="signal ${edge.type}" aria-hidden="true"></i><span class="path-edge-copy"><strong>${escapeHTML(story.title)}</strong><small>${escapeHTML(t(edge.type))} · ${escapeHTML(displayYear(edge.year))}</small></span></button></li>`;
+    }).join('')}</ol>`;
 }
 $('path-form').addEventListener('submit',event => {
   event.preventDefault();
