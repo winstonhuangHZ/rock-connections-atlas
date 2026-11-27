@@ -130,7 +130,7 @@ document.addEventListener('pointerdown',event => {
 });
 document.addEventListener('keydown',event => {
   if (event.key === 'Escape') searchResults.hidden = true;
-  if (event.key === '/' && !event.ctrlKey && !event.metaKey && !event.target.closest('input, textarea, select, [contenteditable]') && !$('relation-dialog').open) {
+  if (event.key === '/' && !event.ctrlKey && !event.metaKey && !event.target.closest('input, textarea, select, [contenteditable]') && !$('intro').hidden && !$('relation-dialog').open) {
     event.preventDefault();
     query.focus();
   }
@@ -563,8 +563,10 @@ $('path-type').addEventListener('change', renderPath);
 
 function route() {
   const [name,id] = location.hash.slice(1).split('/');
-  const tab = ['directory','paths'].includes(name) ? name : 'map';
-  for (const candidate of ['map','directory','paths']) $(candidate).hidden = candidate !== tab;
+  const tabs = ['map','directory','paths','attribution'];
+  const tab = tabs.includes(name) ? name : 'map';
+  for (const candidate of tabs) $(candidate).hidden = candidate !== tab;
+  $('intro').hidden = tab === 'attribution';
   document.querySelectorAll('nav a').forEach(link => {
     if (link.dataset.tab === tab) link.setAttribute('aria-current','page'); else link.removeAttribute('aria-current');
   });

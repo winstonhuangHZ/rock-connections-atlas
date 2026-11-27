@@ -10,7 +10,7 @@
   <title>Rock Connections Atlas</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
   <script defer src="catalog.js?v=2"></script>
   <script defer src="lineups.js?v=2"></script>
   <script defer src="connections.js?v=3"></script>
@@ -21,9 +21,9 @@
   <script defer src="vendor/cytoscape.min.js"></script>
   <script defer src="layout.js?v=3"></script>
   <script defer src="graph-layout.js"></script>
-  <script defer src="locale.js?v=4"></script>
+  <script defer src="locale.js?v=5"></script>
   <script defer src="graph-labels.js?v=6"></script>
-  <script defer src="app.js?v=10"></script>
+  <script defer src="app.js?v=11"></script>
 </head>
 <body>
   <header class="masthead">
@@ -33,12 +33,13 @@
         <a href="#map" data-tab="map" data-copy="map">Network</a>
         <a href="#directory" data-tab="directory" data-copy="directory">Index</a>
         <a href="#paths" data-tab="paths" data-copy="paths">Find a path</a>
+        <a href="#attribution" data-tab="attribution" data-copy="attribution">Attribution</a>
       </nav>
       <button id="language" class="language" type="button" lang="zh-CN" aria-label="切换到中文">中文</button>
     </div>
   </header>
   <main class="wrap">
-    <section class="intro" aria-labelledby="page-title">
+    <section id="intro" class="intro" aria-labelledby="page-title">
       <div class="intro-copy">
         <span class="eyebrow" data-copy="eyebrow">ARCHIVAL CARTOGRAPHY · 1955–2026</span>
         <h1 id="page-title" data-copy="title">Rock Connections Atlas</h1>
@@ -139,6 +140,28 @@
         </form>
         <div id="path-results" aria-live="polite"></div>
       </div>
+    </section>
+
+    <section id="attribution" class="attribution" aria-labelledby="attribution-title" hidden>
+      <h1 id="attribution-title" data-copy="attribution">Attribution</h1>
+      <dl class="attribution-list">
+        <div>
+          <dt data-copy="creditAuthor">Author</dt>
+          <dd lang="en">Winston Huang</dd>
+        </div>
+        <div>
+          <dt data-copy="creditDesign">Website visual design</dt>
+          <dd lang="en">Google Gemini 4 Argon</dd>
+        </div>
+        <div>
+          <dt data-copy="creditDevelopment">Website development and project coordination</dt>
+          <dd lang="en">GPT 6.2 Sol</dd>
+        </div>
+        <div>
+          <dt data-copy="creditData">Data collection and batch operations</dt>
+          <dd><span lang="en">GPT 6.1 Terra</span><span data-copy="creditConjunction"> and </span><span lang="en">DeepSeek V4 Flash</span></dd>
+        </div>
+      </dl>
     </section>
   </main>
   <footer class="wrap footer">
