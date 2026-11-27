@@ -182,7 +182,7 @@ const graph = $('graph');
 const rootStyle = getComputedStyle(document.documentElement);
 const color = token => rootStyle.getPropertyValue('--'+token).trim();
 const landmarks = new Set(['nico','dylan','the-rolling-stones','the-clash','beatles','oasis','zeppelin','nirvana',
-  'queen','radiohead','metallica','pink-floyd','no-party-for-cao-dong']);
+  'queen','radiohead','metallica','pink-floyd']);
 const cy = cytoscape({
   container: graph,
   elements: [
@@ -367,7 +367,7 @@ function shortestPath(from,to,type) {
   return steps;
 }
 const defaultPathSuggestions = [
-  ...['lou','rivers','dylan','beatles','bowie','queen','nirvana','oasis','the-clash','zeppelin','pink-floyd','metallica','radiohead','no-party-for-cao-dong','chuck-berry']
+  ...['lou','rivers','dylan','beatles','bowie','queen','nirvana','oasis','the-clash','zeppelin','pink-floyd','metallica','radiohead','chuck-berry']
     .filter(id => artists[id]).map(id => artists[id]),
   ...entries
 ].filter((person, index, list) => list.indexOf(person) === index);

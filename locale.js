@@ -44,8 +44,7 @@ const sceneWords = {
   '根源摇滚':'Roots rock','交响摇滚':'Symphonic rock','乡村摇滚':'Country rock','工业金属':'Industrial metal',
   '合成器流行与电子摇滚':'Synth-pop and electronic rock','斯卡复兴与新浪潮':'Ska revival and new wave','钢琴摇滚':'Piano rock'
 };
-const englishNames = {'wudu':'Wood Lin','zhuzhu':'Chu Chu Chan','shih-hsuan':'Shih-Hsuan','fanfan':'Fan Tsai',
-  'sam-yang':'Sam Yang','birdy':'Shih Wei Huang'};
+const englishNames = {};
 const englishBios = {
   'barbara-bach':'An American actor whose films include The Spy Who Loved Me and Caveman. She married Ringo Starr in 1981.',
   'marjorie-bach':'Sister of actor Barbara Bach. She married Eagles guitarist Joe Walsh in 2008.',
@@ -69,8 +68,7 @@ const englishBios = {
   oasis:'Manchester rock band built around the singing and songwriting of Liam and Noel Gallagher. Its early albums include Definitely Maybe and (What’s the Story) Morning Glory?',
   'the-clash':'London punk band that broadened its sound through reggae, dub, rockabilly, and other styles. Its core lineup recorded London Calling in 1979.',
   'the-rolling-stones':'A London band rooted in rhythm and blues. The atlas traces the classic lineup and later tenures of Mick Taylor and Ronnie Wood.',
-  'the-beach-boys':'A California band whose close vocal harmonies and studio work helped shape 1960s pop and rock. Pet Sounds was released in 1966.',
-  'no-party-for-cao-dong':'A Taiwanese indie rock band whose studio albums include The Servile (2016) and The Clod (2023).'
+  'the-beach-boys':'A California band whose close vocal harmonies and studio work helped shape 1960s pop and rock. Pet Sounds was released in 1966.'
 };
 const englishStories = `
 nico|lou|The Velvet Underground’s debut|Reed wrote “Femme Fatale,” one of three songs Nico sang on the debut album.

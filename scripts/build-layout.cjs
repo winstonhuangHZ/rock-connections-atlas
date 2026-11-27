@@ -24,7 +24,7 @@ for (const edge of relations) {
 const isBand = id => artists[id].scene.endsWith('乐队');
 const landmarks = new Set([
   'nico', 'dylan', 'the-rolling-stones', 'the-clash', 'beatles', 'oasis',
-  'zeppelin', 'nirvana', 'queen', 'radiohead', 'metallica', 'pink-floyd', 'no-party-for-cao-dong'
+  'zeppelin', 'nirvana', 'queen', 'radiohead', 'metallica', 'pink-floyd'
 ]);
 
 // Optional fresh fcose pass when cytoscape + cytoscape-fcose are installed; otherwise refine existing coordinates

@@ -1,7 +1,7 @@
 const preferred = new Set([
   'dylan','brian-may','buddy','chuck-berry','creedence-clearwater-revival','bowie','deep-purple','eagles',
   'electric-light-orchestra','elton-john','george','guns-n-roses','jimi-hendrix','page','john','joy-division',
-  'zeppelin','lou','nirvana','no-party-for-cao-dong','oasis','paul','pink-floyd','queen','radiohead',
+  'zeppelin','lou','nirvana','oasis','paul','pink-floyd','queen','radiohead',
   'rammstein','the-beach-boys','beatles','the-clash','doors','the-police','the-rolling-stones','vu','wings','yoko'
 ]);
 addArtist('Chuck Berry','美国 · 早期摇滚','摇滚吉他与歌曲写作的先驱。《Johnny B. Goode》和《Roll Over Beethoven》的作者。','查克贝里');
@@ -115,7 +115,6 @@ jones|wings|record|1979|Wings 的 Rockestra 录音|John Paul Jones 为 Wings《B
 pete-townshend|wings|record|1979|Wings 的 Rockestra 录音|Pete Townshend 作为客席乐手参与 Wings《Back to the Egg》的两首 Rockestra 曲目。|The Rockestra sessions|Pete Townshend was a guest musician on the two Rockestra tracks from Wings’ Back to the Egg.|Paul McCartney 官网 · 专辑署名|https://www.paulmccartney.com/discography/albums/back-to-the-egg
 david-gilmour|wings|record|1979|Wings 的 Rockestra 录音|David Gilmour 作为客席吉他手参与 Wings《Back to the Egg》的两首 Rockestra 曲目。|The Rockestra sessions|David Gilmour played guitar on the two Rockestra tracks from Wings’ Back to the Egg.|Paul McCartney 官网 · 专辑署名|https://www.paulmccartney.com/discography/albums/back-to-the-egg
 page|donovan|record|1966 / 2011|《Sunshine Superman》|Page 参与原版录音，并在 2011 年与 Donovan 在皇家阿尔伯特音乐厅重演。|Sunshine Superman|Page played on the original recording and joined Donovan to perform it at the Royal Albert Hall in 2011.|Donovan 官网 · 演出档案|https://donovan.ie/donovan-royal-albert-hall-broadcast/
-no-party-for-cao-dong|nirvana|influence|2015|草东早期的聆听背景|Blow 吹音乐的乐队专访将 Nirvana 列为成员成长时听的乐队之一。|Early listening influences|Blow’s interview with the band identifies Nirvana as one of the bands its members grew up listening to.|Blow 吹音樂 · 草東樂團訪談|https://blow.streetvoice.com/16090/
 `);
 
 const additionalProfiles = [

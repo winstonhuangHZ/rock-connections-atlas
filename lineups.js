@@ -97,7 +97,6 @@ Rammstein|德国|工业金属|德国战车|Till Lindemann;Richard Kruspe;Paul La
 Depeche Mode|英国|合成器流行与电子摇滚|赶时髦乐队|Dave Gahan;Martin Gore;Andy Fletcher~Andy Fletcher (musician);Alan Wilder;Vince Clarke
 Van Halen|美国|硬摇滚|范海伦|Eddie Van Halen;Alex Van Halen;David Lee Roth;Michael Anthony~Michael Anthony (musician);Sammy Hagar;Gary Cherone;Wolfgang Van Halen
 The Beat~The Beat (British band)|英国|斯卡复兴与新浪潮|English Beat|Dave Wakeling;Ranking Roger;Andy Cox;David Steele~David Steele (musician);Everett Morton;Saxa~Saxa (musician)
-No Party for Cao Dong|台湾|独立摇滚|草东没有派对 草東沒有派對 草东|巫堵~No Party for Cao Dong;筑筑~No Party for Cao Dong;世暄~No Party for Cao Dong;凡凡~No Party for Cao Dong;Sam Yang~No Party for Cao Dong;鳥人~No Party for Cao Dong
 `.trim();
 
 const idsByName = new Map(Object.values(artists).map(person => [person.name,person.id]));
@@ -110,7 +109,7 @@ function addArtist(label,scene,bio,aliases='') {
   const {name,wiki} = splitIdentity(label);
   const found = idsByName.get(name);
   if (found) return artists[found];
-  const id = {'巫堵':'wudu','筑筑':'zhuzhu','世暄':'shih-hsuan','凡凡':'fanfan','鳥人':'birdy'}[name] ?? name.normalize('NFKD').toLowerCase().replace(/\p{M}/gu,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const id = name.normalize('NFKD').toLowerCase().replace(/\p{M}/gu,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   if (!id || Object.hasOwn(artists,id)) throw new Error('Conflicting identifier: '+name);
   const person = {id,name,scene,bio,wiki,aliases};
   artists[id] = person;
@@ -126,14 +125,10 @@ for (const row of lineups.split('\n')) {
   const bandURL = 'https://en.wikipedia.org/wiki/'+encodeURIComponent(band.wiki.replaceAll(' ','_'));
   const ref = 'lineup-'+band.id;
   sources[ref] = ['乐队条目 · 历史与阵容',bandURL];
-  if (band.id === 'no-party-for-cao-dong') {
-    sources[ref] = ['Blow 吹音樂 · 草東樂團訪談','https://blow.streetvoice.com/16090/'];
-    sources.clod = ['草東沒有派對 · 《瓦合》唱片署名','https://nopartyforcaodong.bandcamp.com/album/the-clod'];
-  }
   for (const personLabel of names.split(';')) {
     const person = addArtist(personLabel,country+'场景 · '+genre,'曾在 '+bandName+' 的阵容中演出或参与录音。');
     relations.push({a:person.id,b:band.id,type:'member',year:'见阵容记录',title:bandName+' 成员',
       detail:person.name+' 曾是 '+bandName+' 的成员。阵容跨越多个时期，具体任期见来源。',
-      ref:band.id === 'no-party-for-cao-dong' && ['wudu','zhuzhu','sam-yang','birdy','fanfan'].includes(person.id) ? 'clod' : ref});
+      ref});
   }
 }

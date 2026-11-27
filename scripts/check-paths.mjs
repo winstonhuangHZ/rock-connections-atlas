@@ -56,7 +56,7 @@ const checks = [
   ['tom-araya','alice-in-chains',1],
   ['neil-young','pearl-jam',1],
   ['little-richard','jimi-hendrix',1],
-  ['no-party-for-cao-dong','metallica',5]
+  ['rammstein','radiohead',4]
 ];
 let failed = false;
 for (const [from,to,maximum] of checks) {
