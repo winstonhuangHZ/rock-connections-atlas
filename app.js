@@ -183,12 +183,14 @@ const rootStyle = getComputedStyle(document.documentElement);
 const color = token => rootStyle.getPropertyValue('--'+token).trim();
 const landmarks = new Set(['nico','dylan','the-rolling-stones','the-clash','beatles','oasis','zeppelin','nirvana',
   'queen','radiohead','metallica','pink-floyd']);
+const wideGraph = matchMedia('(min-width: 1000px)');
+const graphPositions = spreadGraphPositions(atlasPositions, wideGraph.matches);
 const cy = cytoscape({
   container: graph,
   elements: [
     ...entries.map(person => ({
       data: {id:person.id,name:displayName(person)},
-      position: atlasPositions[person.id],
+      position: graphPositions[person.id],
       classes: [isBand(person) ? 'band' : 'artist', landmarks.has(person.id) ? 'landmark' : byArtist[person.id].length >= 6 ? 'hub' : byArtist[person.id].length === 1 ? 'leaf' : ''].filter(Boolean).join(' ')
     })),
     ...relations.map(edge => ({
@@ -199,25 +201,22 @@ const cy = cytoscape({
   layout: {name:'preset',fit:false},
   style: [
     {selector:'node',style:{
-      width:13,height:13,'background-color':color('node'),label:'data(name)',
-      'font-family':'Spectral, Georgia, Songti SC, serif','font-size':13.5,color:color('white'),'text-margin-y':-6,
-      'text-background-color':color('dark'),'text-background-opacity':.9,'text-background-padding':2.5,
-      'min-zoomed-font-size':11.5,'overlay-opacity':0
+      width:13,height:13,'background-color':color('node'),'overlay-opacity':0
     }},
-    {selector:'.leaf',style:{width:11,height:11,'font-size':12.5,'min-zoomed-font-size':14.5}},
-    {selector:'.band',style:{shape:'diamond',width:24,height:24,'background-color':color('accent'),'font-size':15,'font-weight':600,'min-zoomed-font-size':8.5}},
-    {selector:'.hub',style:{width:20,height:20,'font-size':18,'font-weight':600,'min-zoomed-font-size':7}},
-    {selector:'.band.hub',style:{width:28,height:28,'font-size':19,'font-weight':600,'min-zoomed-font-size':6.8}},
-    {selector:'.landmark',style:{width:30,height:30,'font-size':32,'font-weight':700,'min-zoomed-font-size':4.8,'border-width':2,'border-color':color('dark')}},
+    {selector:'.leaf',style:{width:11,height:11}},
+    {selector:'.band',style:{shape:'diamond',width:24,height:24,'background-color':color('accent')}},
+    {selector:'.hub',style:{width:20,height:20}},
+    {selector:'.band.hub',style:{width:28,height:28}},
+    {selector:'.landmark',style:{width:30,height:30,'border-width':2,'border-color':color('dark')}},
     {selector:'edge',style:{width:1.45,'curve-style':'straight',opacity:.52,'overlay-opacity':0,'line-color':color('record')}},
     ...typeEntries.map(([type]) => ({selector:'edge.'+type,style:{'line-color':color(type)}})),
     {selector:'edge.parallel',style:{'curve-style':'bezier'}},
     {selector:'edge.filtered',style:{display:'none'}},
     {selector:'.muted',style:{opacity:.18}},
     {selector:'edge.related',style:{opacity:1,width:2.8}},
-    {selector:'node.related',style:{'min-zoomed-font-size':0,'font-size':17,'font-weight':600,'border-width':2,'border-color':color('accent')}},
-    {selector:'node.active-node',style:{'min-zoomed-font-size':0,'font-size':24,'font-weight':700,'border-width':4,'border-color':color('white'),'background-color':color('accent')}},
-    {selector:'node.hovered',style:{'z-index':10,'min-zoomed-font-size':0,'font-size':22,'font-weight':700,
+    {selector:'node.related',style:{'border-width':2,'border-color':color('accent')}},
+    {selector:'node.active-node',style:{'border-width':4,'border-color':color('white'),'background-color':color('accent')}},
+    {selector:'node.hovered',style:{'z-index':10,
       'border-width':2.5,'border-color':color('white')}},
     {selector:'edge.hovered',style:{opacity:1,width:3.6}}
   ],
@@ -225,6 +224,7 @@ const cy = cytoscape({
   autoungrabify:true,autounselectify:true,boxSelectionEnabled:false
 });
 cy.edges().forEach(edge => { if (edge.parallelEdges().length > 1) edge.addClass('parallel'); });
+const updateGraphLabels = createGraphLabels(cy);
 
 function fitNetwork() {
   cy.resize();
@@ -237,6 +237,14 @@ function centerArtist(id) {
   if (cy.zoom() > 1.15) cy.zoom(1.15);
   cy.center(node);
 }
+wideGraph.addEventListener('change', event => {
+  const positions = spreadGraphPositions(atlasPositions, event.matches);
+  cy.batch(() => cy.nodes().positions(node => positions[node.id()]));
+  if ($('map').hidden) return;
+  if (selected) centerArtist(selected);
+  else fitNetwork();
+  updateGraphLabels();
+});
 function updateMap() {
   const edges = activeEdges();
   const total = filter === 'all' ? relations.length : relations.filter(edge => edge.type === filter).length;
@@ -255,6 +263,7 @@ function updateMap() {
   $('profile').hidden = !selected;
   $('workspace').classList.toggle('inspecting',Boolean(selected));
   if (selected) renderProfile(edges);
+  updateGraphLabels();
 }
 let keepCamera = false;
 cy.on('tap','node',event => {
@@ -267,10 +276,12 @@ cy.on('tap','edge',event => openRelation(event.target.data('index')));
 cy.on('mouseover','node,edge',event => {
   event.target.addClass('hovered');
   graph.style.cursor = 'pointer';
+  if (event.target.isNode()) updateGraphLabels();
 });
 cy.on('mouseout','node,edge',event => {
   event.target.removeClass('hovered');
   graph.style.cursor = '';
+  if (event.target.isNode()) updateGraphLabels();
 });
 $('profile').addEventListener('click',event => {
   if (event.target.closest('.profile-close')) location.hash = '#map';

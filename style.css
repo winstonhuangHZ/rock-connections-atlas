@@ -325,6 +325,33 @@ kbd {
   background-size: 120px 120px, 120px 120px, 24px 24px;
   touch-action: none;
 }
+.graph-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  font-family: var(--display);
+}
+.graph-label {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  padding-inline: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--dark) 86%, transparent);
+  color: var(--white);
+}
+.graph-label-leader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  background: var(--dark-dim);
+  transform-origin: left center;
+}
 .member { --type: var(--member); }
 .record { --type: var(--record); }
 .tour { --type: var(--tour); }
