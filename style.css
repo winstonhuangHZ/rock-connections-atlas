@@ -1038,6 +1038,25 @@ kbd {
 }
 .attribution-list dt { color: var(--dim); }
 .attribution-list dd { margin: 0; font-weight: 600; }
+.attribution-sources { margin-top: 32px; }
+.attribution-sources details { border-bottom: 1px solid var(--line); }
+.attribution-sources details:first-child { border-top: 1px solid var(--line); }
+.attribution-sources summary {
+  padding-block: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.credit-count {
+  margin-inline-start: 10px;
+  font: 500 12px var(--mono);
+  color: var(--dim);
+}
+.credit-list { list-style: none; margin: 0 0 16px; padding-inline-start: 16px; }
+.credit-list li { padding-block: 6px; overflow-wrap: anywhere; }
+.credit-list li + li { border-top: 1px solid var(--line); }
+.credit-list small { display: block; color: var(--dim); }
+.credit-list a { text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+.credit-list a:hover { color: var(--signal); }
 
 .footer {
   display: flex;

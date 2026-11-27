@@ -10,7 +10,7 @@
   <title>Rock Connections Atlas</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=12">
   <script defer src="catalog.js?v=2"></script>
   <script defer src="lineups.js?v=2"></script>
   <script defer src="connections.js?v=3"></script>
@@ -21,9 +21,9 @@
   <script defer src="vendor/cytoscape.min.js"></script>
   <script defer src="layout.js?v=3"></script>
   <script defer src="graph-layout.js"></script>
-  <script defer src="locale.js?v=5"></script>
+  <script defer src="locale.js?v=6"></script>
   <script defer src="graph-labels.js?v=6"></script>
-  <script defer src="app.js?v=11"></script>
+  <script defer src="app.js?v=12"></script>
 </head>
 <body>
   <header class="masthead">
@@ -162,6 +162,20 @@
           <dd><span lang="en">GPT 6.1 Terra</span><span data-copy="creditConjunction"> and </span><span lang="en">DeepSeek V4 Flash</span></dd>
         </div>
       </dl>
+      <div class="attribution-sources">
+        <details>
+          <summary><span data-copy="creditReferences">Relationship references</span><span id="credit-reference-count" class="credit-count"></span></summary>
+          <ul id="credit-references" class="credit-list"></ul>
+        </details>
+        <details>
+          <summary><span data-copy="creditPortraits">Image sources and licenses</span><span id="credit-portrait-count" class="credit-count"></span></summary>
+          <ul id="credit-portraits" class="credit-list"></ul>
+        </details>
+        <details>
+          <summary><span data-copy="creditProfiles">Artist and band reference pages</span><span id="credit-profile-count" class="credit-count"></span></summary>
+          <ul id="credit-profiles" class="credit-list"></ul>
+        </details>
+      </div>
     </section>
   </main>
   <footer class="wrap footer">

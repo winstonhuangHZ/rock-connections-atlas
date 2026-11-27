@@ -53,6 +53,7 @@ function displayStory(edge) {
   return edge;
 }
 const displayYear = year => (language === 'en' ? englishYearWords[year] : null) ?? year;
+const profileReferenceUrl = person => 'https://en.wikipedia.org/wiki/' + encodeURIComponent(person.wiki.replaceAll(' ','_'));
 function displaySource(source) {
   if (language === 'zh') return source[0];
   const url = new URL(source[1]);
@@ -161,7 +162,7 @@ $('filters').addEventListener('click',event => {
 function renderProfile(edges) {
   const p = artists[selected];
   const image = portraits[selected];
-  const wiki = 'https://en.wikipedia.org/wiki/' + encodeURIComponent(p.wiki.replaceAll(' ','_'));
+  const wiki = profileReferenceUrl(p);
   const credit = image ? `<a href="${escapeHTML(image.url)}" target="_blank" rel="noopener" title="${escapeHTML(image.author)} · ${escapeHTML(image.license)}">${t('credit')}</a>` : '';
   const connections = edges.map(edge => {
     const person = artists[other(edge,selected)];
@@ -561,6 +562,36 @@ $('path-form').addEventListener('submit',event => {
 });
 $('path-type').addEventListener('change', renderPath);
 
+function renderAttribution() {
+  const locale = document.documentElement.lang;
+  const link = (url, label) => `<a href="${escapeHTML(url)}" target="_blank" rel="noopener">${escapeHTML(label)}</a>`;
+  const references = new Map();
+  for (const [label,url] of Object.values(sources)) {
+    if (!references.has(url)) references.set(url,new Set());
+    references.get(url).add(label);
+  }
+  const citations = [...references].map(([url,labels]) => ({
+    url, title:[...labels].join(' / '), publisher:new URL(url).hostname.replace(/^www\./,'')
+  })).sort((a,b) => a.publisher.localeCompare(b.publisher) || a.title.localeCompare(b.title,locale));
+  $('credit-reference-count').textContent = citations.length.toLocaleString(locale);
+  $('credit-references').innerHTML = citations.map(({url,title,publisher}) =>
+    `<li>${link(url,title)} <small>${escapeHTML(publisher)}</small></li>`
+  ).join('');
+
+  const people = [...entries].sort((a,b) => displayName(a).localeCompare(displayName(b),locale));
+  const illustrated = people.filter(person => portraits[person.id]);
+  $('credit-portrait-count').textContent = illustrated.length.toLocaleString(locale);
+  $('credit-portraits').innerHTML = illustrated.map(person => {
+    const {url,author,license,licenseUrl} = portraits[person.id];
+    const licenseCredit = licenseUrl ? link(licenseUrl,license) : escapeHTML(license);
+    return `<li>${link(url,displayName(person))} <small>${escapeHTML(author)} · ${licenseCredit}</small></li>`;
+  }).join('');
+  $('credit-profile-count').textContent = people.length.toLocaleString(locale);
+  $('credit-profiles').innerHTML = people.map(person =>
+    `<li>${link(profileReferenceUrl(person),displayName(person))}</li>`
+  ).join('');
+}
+
 function route() {
   const [name,id] = location.hash.slice(1).split('/');
   const tabs = ['map','directory','paths','attribution'];
@@ -587,6 +618,7 @@ function route() {
   }
   if (tab === 'directory') renderDirectory();
   if (tab === 'paths') renderPath();
+  if (tab === 'attribution') renderAttribution();
 }
 window.addEventListener('hashchange',route);
 let lastSize = '';
@@ -623,6 +655,7 @@ function updateLanguage() {
   if (!$('map').hidden) updateMap();
   if (!$('directory').hidden) renderDirectory();
   if (!$('paths').hidden) renderPath();
+  if (!$('attribution').hidden) renderAttribution();
 }
 $('language').addEventListener('click',() => {
   language = language === 'en' ? 'zh' : 'en';
