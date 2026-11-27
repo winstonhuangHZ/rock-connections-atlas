@@ -1,73 +1,82 @@
-# Rock Connections Atlas: connectivity audit
+# Rock Connections Atlas connectivity audit
 
-Audit date: 2026-11-26
-
-## Scope
-
-This pass adds documented relationships between entities already present in the atlas. It does not create new person or band nodes, so stable identifiers and the precomputed graph positions remain valid. The primary sources for expansion are official artist archives, Rock & Roll Hall of Fame induction essays, contemporary reporting, and MusicBrainz artist-relationship records.
+**Audit date:** 2026-11-27. **Baseline:** commit `a7885e3`, including the previous research pass. The baseline's 842 relationship records were preserved. This pass reviewed 512 candidates and retained 442, alongside ten profiles chosen for their historical importance or connections to existing performers.
 
 ## Before and after
 
-| Measure | Before | After |
+| Measure | Baseline | Expanded |
 |---|---:|---:|
-| Nodes | 642 | 642 |
-| People | 523 | 523 |
-| Bands | 119 | 119 |
-| Relationship records | 742 | 842 |
-| Unique connected entity pairs | 740 | 834 |
-| Mean degree | 2.305 | 2.598 |
-| Median degree | 1 | 1 |
-| Nodes with one connection | 380 | 337 |
-| Isolated nodes | 0 | 0 |
+| Entities | 642 | 652 |
+| People and associated figures | 523 | 532 |
+| Bands | 119 | 120 |
+| Relationship records | 842 | 1,284 |
+| Unique connected pairs | 834 | 1,231 |
+| Mean degree | 2.60 | 3.78 |
+| Median degree | 1 | 2 |
+| Isolated entities | 0 | 0 |
+| Entities with exactly one neighbor | 337 | 262 |
 | Connected components | 1 | 1 |
-| Average shortest path | 9.292 | 7.166 |
-| Diameter | 24 | 19 |
+| Largest component | 642 | 652 |
+| Mean shortest-path length in largest component | 7.17 | 5.06 |
+| Diameter of largest component | 19 | 12 |
+| Non-leaf bridges | 40 | 16 |
 
-The 100 added records comprise 21 membership, 37 recording/performance, one personal-contact, 15 family, and 26 influence/reference relationships. Because some pairs have more than one independently meaningful relationship, the number of unique connected pairs increases by 94.
+Degree, distance, bridges, and betweenness use the simple undirected projection, with each entity pair counted once. The mean path length and diameter use the largest component. Betweenness is unnormalized and counts each unordered pair once. A non-leaf bridge is a single pair whose removal separates two groups that each contain at least two nodes.
 
-## Distribution and centrality
+| Relationship category | Baseline | Expanded | Added |
+|---|---:|---:|---:|
+| Band membership | 622 | 631 | 9 |
+| Recording and performance | 137 | 444 | 307 |
+| Tours and support acts | 0 | 11 | 11 |
+| Personal or documented professional contact | 11 | 21 | 10 |
+| Family | 18 | 23 | 5 |
+| Influence, covers, and references | 54 | 154 | 100 |
 
-After the expansion, the highest-degree entities are Paul McCartney (17), Oasis (15), Deep Purple (15), The Rolling Stones (14), and a group at 13 comprising The Beatles, The Clash, The Cure, Black Sabbath, Queen, and Wings.
+Degree distribution by bin:
 
-The highest-betweenness entities are Queen, David Bowie, The Clash, The Beatles, Nirvana, Oasis, Paul McCartney, and The Cure. This remains a useful indication of where the graph exposes historical bridges, not a measure of artistic importance.
+| Distinct neighbors | Baseline | Expanded |
+|---|---:|---:|
+| 0 | 0 | 0 |
+| 1 | 337 | 262 |
+| 2 | 117 | 105 |
+| 3–5 | 109 | 143 |
+| 6–9 | 56 | 83 |
+| 10+ | 23 | 59 |
+
+The initial highest-degree entities were Paul McCartney (17), Oasis (15), and Deep Purple (15). The expanded leaders are David Bowie (38), Bob Dylan (28), Eric Clapton (27), the Rolling Stones (25), and Warren Zevon (21). Bowie, Zevon, and the Rolling Stones received additional review for repeated sessions and attribution.
+
+The baseline betweenness leaders were Queen (40,215.5), David Bowie (37,384.1), and the Clash (36,220.1). The expanded leaders are David Bowie (46,465.6), the Ramones (21,692.3), Metallica (21,656.3), the Rolling Stones (19,372.5), and Bob Dylan (18,147.8). These figures describe coverage in the atlas.
 
 ## Diagnostic paths
 
-The checked paths are regression bounds, not preferred-path fixtures. The browser and `scripts/check-paths.mjs` use the same general shortest-path logic.
+| Pair | Baseline → Expanded | Example expanded result |
+|---|---:|---|
+| Joe Strummer → Nico | 3 → 2 | Bob Dylan performed Strummer's co-written “London Calling.” Nico recorded Dylan's “I'll Keep It With Mine.” |
+| Joe Strummer → Paul McCartney | 2 → 2 | Via Roger Daltrey. |
+| Brian May → Rivers Cuomo | 2 → 2 | Via Foo Fighters. |
+| Brian May → Ringo Starr | 3 → 3 | Via Queen and the Beatles. |
+| Brian May → Weezer | 3 → 3 | Via Foo Fighters and Rivers Cuomo. |
+| John Bonham → Oasis | 3 → 2 | Bonham was a Led Zeppelin member. Noel Gallagher cited Led Zeppelin as a reference point for “Gas Panic!” |
+| Jim Morrison → Chester Bennington | 11 → 3 | The Doors → Scott Weiland, who later performed “Wonderful” with Bennington. |
+| Kurt Cobain → Pete Shelley | 9 → 3 | Nirvana → Buzzcocks. The middle edge records tour support. |
+| Bob Dylan → Clem Burke | 3 → 1 | Burke played drums on “Under Your Spell.” |
 
-| From | To | Edges | Evidence-based route |
-|---|---|---:|---|
-| Joe Strummer | Nico | 3 | The Clash → Bob Dylan → Nico |
-| Joe Strummer | Paul McCartney | 2 | Roger Daltrey → McCartney |
-| Brian May | Rivers Cuomo | 2 | Foo Fighters → Rivers Cuomo |
-| Brian May | Ringo Starr | 3 | Queen → The Beatles → Ringo Starr |
-| Brian May | Weezer | 3 | Foo Fighters → Rivers Cuomo → Weezer |
-| John Bonham | Oasis | 3 | Paul McCartney → The Beatles → Oasis |
+The Strummer and Bonham shortcuts combine different kinds of evidence. Neither establishes a meeting or a recording together. The tour filter separates documented opening slots and tours from recording and performance credits. A directional record preserves the contributor or source in its details, while the path finder supports traversal in both directions. Multiple independent credits between the same people are retained and displayed individually.
 
-The path suite also covers older rock and roll, punk, art rock, alternative rock, and metal across several decades and countries.
+## Historical highlights and coverage
 
-## Source coverage
+- Mike Shinoda was credited for the lead reinterpretation on Depeche Mode's 2004 “Enjoy the Silence” reissue. [Depeche Mode archive](https://archives.depechemode.com/audio/releases/enjoythesilence04.html)
+- Angus and Malcolm Young joined the Rolling Stones for “Rock Me Baby” on four 2003 dates. The AC/DC opening slots are recorded separately. [AC/DC archive](https://www.acdc.com/on-this-day-2003-4/)
+- The punk and new-wave sessions include Steve Jones and Paul Simonon on Dylan's “Sally Sue Brown,” and Clem Burke on “Under Your Spell.” [Down in the Groove](https://www.bobdylan.com/albums/down-in-the-groove/) · [Knocked Out Loaded](https://www.bobdylan.com/albums/knocked-out-loaded/)
+- The expansion adds Alice in Chains and its original lineup plus Mike Inez, along with Elvis Presley, Little Richard, Neil Young, and David Crosby. It prioritizes existing entities, without generating band-member cliques or connecting everyone at the same event.
 
-Of the 100 added records, 57 cite MusicBrainz artist/release relationship pages. The remaining records draw mainly on 26 Rock & Roll Hall of Fame pages, official Paul McCartney, George Harrison, Ringo Starr, and Queen archives, and selected reporting. MusicBrainz is treated as a specialist structured database rather than an unquestioned source; ambiguous entity matches are skipped.
+The 442 new records cite 290 distinct URLs from 126 domains. They include 171 explicit direction annotations. Research drew on original credits, artist and label archives, first-person interviews, performance footage, and selected specialist catalogs. A separate reviewer sampled 36 candidate rows in two passes. Editorial review eliminated semantic repeats, corrected an ambiguous Heartbreakers identifier, replaced dead citations, clarified the provenance of reissue credits, and separated covers and tour support from joint recordings. The HTTP probe reached most references, but some source hosts restricted automated requests. Those statuses do not verify or disprove a credit.
 
-The refresh utility is deliberately separate from production data:
+## Reproduction and remaining gaps
 
-```sh
-node scripts/refresh-musicbrainz.mjs
-```
+- `connections-enrichment.js` contains the new profiles and bilingual cited relationships. The shared loader and dataset validator check direction and relationship type.
+- `node scripts/data.mjs --check` passed. `node scripts/check-paths.mjs` passed 24 path checks and four type-filter checks. The checks use ordinary graph search with no preferred routes.
+- `node scripts/graph-stats.mjs` reproduces the degree histogram, component metrics, centralities, and non-leaf bridges. `node scripts/build-layout.cjs` regenerated the network layout with the documented optional dependencies.
+- Browser checks covered full graph rendering, new profile search and citation details, path comboboxes and swapping, the tour filter, direction, switching to Chinese, and mobile overflow.
 
-It writes candidate JSON for review and does not edit the graph. Cached API responses stay under `.cache/`.
-
-## Validation
-
-- `node scripts/data.mjs --check` checks identifiers, endpoints, duplicate records, citations, translations, layout coordinates, and portrait files.
-- `node scripts/check-paths.mjs` checks the named diagnostic paths and relationship-type filtering.
-- `node scripts/graph-stats.mjs` reproduces the connectivity measurements.
-- The local page was loaded in a browser; search, the path form, language switching, relationship counts, and graph rendering were checked manually.
-
-## Remaining gaps
-
-- The stated research target of roughly 5,000 relationships has not been reached. This pass adds 100 records with traceable sources rather than filling a quota.
-- There are still 337 nodes with only one recorded connection. Many are historical band members whose only available link in this atlas is their band.
-- The graph remains strongly oriented toward British and American rock. Non-Western scenes and session musicians outside the existing inventory remain underrepresented.
-- MusicBrainz records can be community-maintained and vary in specificity. Ambiguous redirect pages and identity collisions are now rejected by the refresh script, but individual claims still benefit from a second source before promotion into heavily curated prose.
+The 5,000-record research target remains open. The atlas has 262 single-neighbor entities, concentrated among historical band lineups. No Party for Cao Dong still depends on one cross-scene bridge to Nirvana in the graph, and Pixies and the Breeders remain sensitive to removal of their Kim Deal membership edges. Better-documented non-Western collaborations, personnel for less connected bands, and independent verification of specialist-database records are priorities for future work.

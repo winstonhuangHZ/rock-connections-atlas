@@ -32,18 +32,23 @@ for (const start of ids) {
 }
 components.sort((a,b) => b.length-a.length);
 
-const distances = new Map(ids.map(id => [id,new Map([[id,0]])]));
+const largest = components[0] ?? [];
 let diameter = 0;
 let diameterPair = null;
-for (const start of ids) {
+let pathLength = 0;
+let pathCount = 0;
+for (const start of largest) {
+  const distances = new Map([[start,0]]);
   const queue = [start];
   for (let index = 0; index < queue.length; index++) {
     const id = queue[index];
-    const nextDistance = distances.get(start).get(id)+1;
+    const nextDistance = distances.get(id)+1;
     for (const next of adjacency.get(id)) {
-      if (distances.get(start).has(next)) continue;
-      distances.get(start).set(next,nextDistance);
+      if (distances.has(next)) continue;
+      distances.set(next,nextDistance);
       queue.push(next);
+      pathLength += nextDistance;
+      pathCount++;
       if (nextDistance > diameter) {
         diameter = nextDistance;
         diameterPair = [start,next];
@@ -52,9 +57,27 @@ for (const start of ids) {
   }
 }
 
-const positiveDistances = [...distances.values()]
-  .flatMap(component => [...component.values()])
-  .filter(value => value > 0);
+// A non-leaf bridge is a unique pair whose removal separates two groups.
+const bridges = [];
+for (const component of components) {
+  for (const a of component) {
+    if (degree[a] < 2) continue;
+    for (const b of adjacency.get(a)) {
+      if (b <= a || degree[b] < 2) continue;
+      const seen = new Set([a]);
+      const queue = [a];
+      for (const id of queue) {
+        for (const next of adjacency.get(id)) {
+          if ((id === a && next === b) || seen.has(next)) continue;
+          seen.add(next);
+          queue.push(next);
+        }
+      }
+      if (!seen.has(b)) bridges.push({a,b,smallerGroup:Math.min(seen.size,component.length-seen.size)});
+    }
+  }
+}
+bridges.sort((a,b) => b.smallerGroup-a.smallerGroup);
 const betweenness = Object.fromEntries(ids.map(id => [id,0]));
 for (const source of ids) {
   const stack = [];
@@ -107,13 +130,15 @@ console.log(JSON.stringify({
   degreeHistogram:histogram,
   components:components.length,
   componentSizes:components.map(component => component.length),
-  largestComponent:components[0].length,
-  largestComponentShare:components[0].length/ids.length,
-  averageShortestPath:positiveDistances.reduce((a,b) => a+b,0)/positiveDistances.length,
+  largestComponent:largest.length,
+  largestComponentShare:largest.length/ids.length,
+  averageShortestPath:pathCount ? pathLength/pathCount : null,
+  nonLeafBridgeCount:bridges.length,
+  mostFragileBridges:bridges.slice(0,20),
   diameter,
   diameterPair:diameterPair?.map(id => ({id,name:artists[id].name})) ?? null,
   topDegree:Object.entries(degree).sort((a,b) => b[1]-a[1]).slice(0,20)
-    .map(([id,value]) => ({id,name:artists[id].name,degree:value})),
+    .map(([id,value]) => ({id,name:artists[id].name,degree:value,centrality:Number((value/Math.max(ids.length-1,1)).toFixed(6))})),
   topBetweenness:Object.entries(betweenness).sort((a,b) => b[1]-a[1]).slice(0,20)
-    .map(([id,value]) => ({id,name:artists[id].name,betweenness:Number(value.toFixed(3))}))
+    .map(([id,value]) => ({id,name:artists[id].name,betweenness:Number((value/2).toFixed(3))}))
 },null,2));

@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const directory = require('node:path').resolve(__dirname, '..') + '/';
 const context = {};
-for (const file of ['catalog', 'lineups', 'connections', 'connections-musicbrainz', 'connections-research', 'layout']) {
+for (const file of ['catalog', 'lineups', 'connections', 'connections-musicbrainz', 'connections-research', 'connections-enrichment', 'layout']) {
   vm.runInNewContext(fs.readFileSync(directory + file + '.js', 'utf8'), context);
 }
 const { artists, relations, sources, types, atlasPositions } = vm.runInNewContext(

@@ -3,7 +3,7 @@ import {createContext, runInContext} from 'node:vm';
 
 const root = new URL('../', import.meta.url);
 const context = createContext({});
-for (const name of ['catalog','lineups','connections','connections-musicbrainz','connections-research','portraits','layout','locale']) {
+for (const name of ['catalog','lineups','connections','connections-musicbrainz','connections-research','connections-enrichment','portraits','layout','locale']) {
   const url = new URL(name+'.js',root);
   runInContext(readFileSync(url,'utf8'),context,{filename:url.pathname});
 }
@@ -19,9 +19,9 @@ if (process.argv[2] === '--check') {
   }
   const pairs = new Set();
   for (const edge of relations) {
-    const {a,b,type,ref,title,detail,en} = edge;
+    const {a,b,type,ref,title,detail,en,direction} = edge;
     const check = [a,b].sort().concat(type,title).join('|');
-    if (!artists[a] || !artists[b] || a === b || !types[type] || !title || !detail || pairs.has(check)) {
+    if (!artists[a] || !artists[b] || a === b || !types[type] || !title || !detail || (direction !== undefined && direction !== 'forward') || pairs.has(check)) {
       throw Error('Invalid or duplicate relationship: '+check);
     }
     if (!sources[ref]?.[0] || new URL(sources[ref][1]).protocol !== 'https:') throw Error('Invalid source: '+ref);

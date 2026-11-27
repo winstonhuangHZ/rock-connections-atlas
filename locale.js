@@ -9,7 +9,7 @@ const strings = {
     credit:'Image credit',archive:'Reference',direct:'Direct relationships',close:'Close',profile:'Profile',
     source:'Source',noPath:'No path was found in the current dataset.',samePath:'Choose two different people or bands.',
     shortest:'Shortest path',nodes:'nodes',edges:'relationships',personUnit:'people',bandUnit:'bands',
-    member:'Band membership',record:'Recording & performance',personal:'Personal contact',family:'Family',influence:'Influence & references',
+    member:'Band membership',record:'Recording & performance',tour:'Tours & support acts',direction:'to',personal:'Personal contact',family:'Family',influence:'Influence & references',
     searchRegion:'Search',graphRegion:'Interactive relationship graph. Every entry is also available through search and the index.',
     filters:'Filter by relationship',zoom:'Graph zoom',indexFilter:'Index filter',navigation:'Main navigation',photo:'Photograph of',
     shape:'● Person   ◆ Band',sortFeatured:'Curated',sortConnections:'Most connected',sortAlpha:'A–Z',indexSort:'Sort index',pathSearchPlaceholder:'Type name or band…',swapEndpoints:'Swap From and To'
@@ -24,7 +24,7 @@ const strings = {
     credit:'图像署名',archive:'档案',direct:'直接关系',close:'关闭',profile:'人物详情',
     source:'来源',noPath:'当前资料中暂时找不到这两者的路径。',samePath:'请选择不同的人物或乐队。',
     shortest:'最短路径',nodes:'个节点',edges:'条关系',personUnit:'位人物',bandUnit:'支乐队',
-    member:'乐队与成员',record:'录音与演出',personal:'交往与相识',family:'亲属关系',influence:'影响与致敬',
+    member:'乐队与成员',record:'录音与演出',tour:'巡演与暖场',direction:'指向',personal:'交往与相识',family:'亲属关系',influence:'影响与致敬',
     searchRegion:'搜索',graphRegion:'交互式关系图。所有条目也可以通过搜索和人物索引访问。',
     filters:'按关系筛选',zoom:'图谱缩放',indexFilter:'索引类型',navigation:'主导航',photo:'照片',
     shape:'● 人物   ◆ 乐队',sortFeatured:'精选导览',sortConnections:'关联最多',sortAlpha:'姓名 A–Z',indexSort:'索引排序',pathSearchPlaceholder:'输入姓名、中文名或乐队搜索…',swapEndpoints:'交换起点与终点'
@@ -181,3 +181,11 @@ Object.assign(englishBios,{
 
 englishBios['bruce-springsteen'] = 'New Jersey songwriter and performer whose longtime collaborators include the E Street Band.';
 englishBios['grateful-dead'] = 'A San Francisco Bay Area rock band known for live improvisation and extensively documented concerts.';
+
+Object.assign(englishBios,{
+  'elvis-presley':'American rock and roll singer whose Sun and RCA recordings became touchstones for later performers.',
+  'little-richard':'American singer, pianist, and rock and roll pioneer, whose 1950s recordings include “Long Tall Sally” and “Tutti Frutti.”',
+  'alice-in-chains':'Seattle rock band that released Facelift, Sap, and Dirt in the early 1990s.',
+  'neil-young':'Canadian songwriter and guitarist known for acoustic and electric recordings, including Mirror Ball with members of Pearl Jam.',
+  'david-crosby':'American songwriter and singer, a founding member of the Byrds and Crosby, Stills & Nash.'
+});

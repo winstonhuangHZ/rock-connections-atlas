@@ -289,7 +289,7 @@ function openRelation(index) {
   $('dialog-content').innerHTML = `<span class="scene">${t(edge.type)} · ${escapeHTML(displayYear(edge.year))}</span>
     <h2 id="dialog-title">${escapeHTML(displayStory(edge).title)}</h2><p>${escapeHTML(edge.detail)}</p>
     <p><a href="${escapeHTML(src[1])}" target="_blank" rel="noopener">${t('source')} · ${escapeHTML(displaySource(src))}</a></p>
-    <div class="dialog-people">${[edge.a,edge.b].map(id => `<a href="${mapLink(id)}">${avatar(artists[id])}${escapeHTML(displayName(artists[id]))}</a>`).join('')}</div>`;
+    <div class="dialog-people${edge.direction ? ' directed' : ''}">${[edge.a,edge.b].map(id => `<a href="${mapLink(id)}">${avatar(artists[id])}${escapeHTML(displayName(artists[id]))}</a>`).join(edge.direction ? `<span role="img" aria-label="${t('direction')}">→</span>` : '')}</div>`;
   dialog.showModal();
 }
 document.addEventListener('click',event => {

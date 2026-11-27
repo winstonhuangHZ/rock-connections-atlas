@@ -33,23 +33,30 @@ function shortestPath(from,to,type = 'all') {
 }
 
 const checks = [
-  ['joe-strummer','nico',7],
+  ['joe-strummer','nico',2],
   ['joe-strummer','paul',2],
   ['brian-may','rivers',2],
   ['brian-may','ringo',3],
   ['brian-may','weezer',3],
-  ['bonham','oasis',4],
+  ['bonham','oasis',2],
   ['buddy','kurt',5],
   ['chuck-berry','liam',3],
-  ['jim','chester-bennington',11],
+  ['jim','chester-bennington',3],
   ['brian-wilson','thom-yorke',6],
   ['lou','grohl',3],
   ['johnny-rotten','thom-yorke',7],
-  ['james-hetfield','liam',8],
+  ['james-hetfield','liam',5],
   ['tony-iommi','kurt',4],
   ['patti','chris-cornell',7],
   ['ray-davies','axl-rose',5],
-  ['r-e-m','radiohead',1]
+  ['r-e-m','radiohead',1],
+  ['dylan','clem-burke',1],
+  ['kurt','pete-shelley',3],
+  ['mike-shinoda','depeche-mode',1],
+  ['tom-araya','alice-in-chains',1],
+  ['neil-young','pearl-jam',1],
+  ['little-richard','jimi-hendrix',1],
+  ['no-party-for-cao-dong','metallica',5]
 ];
 let failed = false;
 for (const [from,to,maximum] of checks) {
@@ -65,11 +72,18 @@ for (const [from,to,maximum] of checks) {
   if (path.length > maximum) failed = true;
 }
 
-const memberExample = shortestPath('page','bonham','member');
-if (!memberExample || memberExample.length !== 2) {
-  console.error('FAIL relationship-type filtered traversal');
-  failed = true;
-} else {
-  console.log('PASS relationship-type filtered traversal');
+for (const [from,to,type,expected] of [
+  ['page','bonham','member',2],
+  ['ringo','joe-walsh','family',3],
+  ['linkin-park','metallica','tour',1],
+  ['depeche-mode','mike-shinoda','record',1]
+]) {
+  const route = shortestPath(from,to,type);
+  if (route?.length !== expected || route.some(([,edge]) => edge.type !== type)) {
+    console.error(`FAIL ${type} filter: ${artists[from].name} → ${artists[to].name}`);
+    failed = true;
+  } else {
+    console.log(`PASS ${type} filter: ${artists[from].name} → ${artists[to].name}`);
+  }
 }
 if (failed) process.exitCode = 1;

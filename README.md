@@ -17,6 +17,7 @@ The current connectivity audit and its limitations are recorded in [`AUDIT.md`](
 - `connections.js` documents individual recordings, performances, influences and public family ties. Its bilingual entries store both descriptions beside the citation. Names in the English interface retain their original spelling where appropriate.
 - `connections-musicbrainz.js` contains reviewed artist-to-artist records from MusicBrainz. These supplement the curated prose records and link back to the source artist's relationship page.
 - `connections-research.js` contains reviewed candidates from the parallel historical research passes. Entries are kept separate so structured-database and curated sources remain auditable.
+- `connections-enrichment.js` records the November 27 expansion. Each bilingual record includes a source, with direction when the credit or influence has a clear origin. Tour and support credits have a dedicated filter.
 - `portraits.js` links image files to the Wikimedia Commons file pages with creator and license information. Portraits are included selectively. Entries without a local image use initials.
 - `layout.js` contains the precomputed graph coordinates. The browser renderer is the vendored Cytoscape.js release. Its license is in `vendor/`. Font licenses are in `fonts/`.
 

@@ -85,11 +85,12 @@ addArtist('Donovan','苏格兰 · 民谣摇滚','1960 年代创作歌手，《Su
 
 function addBilingualStories(stories) {
   for (const row of stories.trim().split('\n')) {
-    const [a,b,type,year,title,detail,englishTitle,englishDetail,source,url] = row.split('|');
+    const [a,b,type,year,title,detail,englishTitle,englishDetail,source,url,direction] = row.split('|');
     if (!artists[a] || !artists[b]) throw new Error('Unknown connection endpoint: '+a+' / '+b);
     const ref = 'documented-'+relations.length;
     sources[ref] = [source,url];
-    relations.push({a,b,type,year,title,detail,ref,en:{title:englishTitle,detail:englishDetail}});
+    if (direction && direction !== "forward") throw new Error("Invalid direction: "+direction);
+    relations.push({a,b,type,year,title,detail,ref,en:{title:englishTitle,detail:englishDetail},...(direction && {direction})});
   }
 }
 

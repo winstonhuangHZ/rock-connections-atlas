@@ -161,6 +161,7 @@ for (const [band,ref,year,title,members] of memberships) {
 const types = {
   member: '乐队与成员',
   record: '录音与演出',
+  tour: '巡演与暖场',
   personal: '私人交往',
   family: '亲属关系',
   influence: '影响与致敬'
