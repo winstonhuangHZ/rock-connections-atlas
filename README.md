@@ -31,6 +31,17 @@ Run `node scripts/check-paths.mjs` to verify the historical path benchmark used 
 
 `node scripts/audit-lineups.mjs` compares roster names with the corresponding reference pages and emits JSON for review. Name matches are leads. Check roles and years on the source pages before adding a relationship. The audit stops at an HTTP 429 response, preserving the completed results.
 
+To add missing portrait and band photographs in batches:
+
+```sh
+node scripts/refresh-portraits.mjs --limit 120
+# Review .cache/portrait-candidates.json and remove unsuitable entries.
+node scripts/refresh-portraits.mjs --apply
+node scripts/data.mjs --check
+```
+
+Discovery prioritizes artists and bands by their relationship count. It uses the free lead image on the catalog's Wikipedia article, confirms the file's license and author on Wikimedia Commons, and skips ambiguous article names, decorative images, and reused files. Review the candidates for subject and crop before applying. Apply downloads a bounded-size thumbnail, retains the file-page and license credits, and leaves existing portraits in place. Rerunning discovery considers only entries still missing an image. The manifest is local and ignored by Git.
+
 To regenerate positions after adding nodes or relationships, install the layout dependencies locally and run:
 
 ```sh
