@@ -181,6 +181,22 @@ function renderProfile(edges) {
 const graph = $('graph');
 const rootStyle = getComputedStyle(document.documentElement);
 const color = token => rootStyle.getPropertyValue('--'+token).trim();
+// Native Cytoscape label styles from the original atlas (8faf9da).
+const classicLabels = [
+  {selector:'node.classic-label',style:{
+    label:'data(name)','font-family':'Spectral, Georgia, Songti SC, serif','font-size':13.5,color:color('white'),
+    'text-margin-y':-6,'text-background-color':color('dark'),'text-background-opacity':.9,
+    'text-background-padding':2.5,'min-zoomed-font-size':11.5
+  }},
+  {selector:'node.classic-label.leaf',style:{'font-size':12.5,'min-zoomed-font-size':14.5}},
+  {selector:'node.classic-label.band',style:{'font-size':15,'font-weight':600,'min-zoomed-font-size':8.5}},
+  {selector:'node.classic-label.hub',style:{'font-size':18,'font-weight':600,'min-zoomed-font-size':7}},
+  {selector:'node.classic-label.band.hub',style:{'font-size':19,'font-weight':600,'min-zoomed-font-size':6.8}},
+  {selector:'node.classic-label.landmark',style:{'font-size':32,'font-weight':700,'min-zoomed-font-size':4.8}},
+  {selector:'node.classic-label.related',style:{'min-zoomed-font-size':0,'font-size':17,'font-weight':600}},
+  {selector:'node.classic-label.active-node',style:{'min-zoomed-font-size':0,'font-size':24,'font-weight':700}},
+  {selector:'node.classic-label.hovered',style:{'min-zoomed-font-size':0,'font-size':22,'font-weight':700}}
+];
 const landmarks = new Set(['nico','dylan','the-rolling-stones','the-clash','beatles','oasis','zeppelin','nirvana',
   'queen','radiohead','metallica','pink-floyd']);
 const wideGraph = matchMedia('(min-width: 1000px)');
@@ -218,13 +234,30 @@ const cy = cytoscape({
     {selector:'node.active-node',style:{'border-width':4,'border-color':color('white'),'background-color':color('accent')}},
     {selector:'node.hovered',style:{'z-index':10,
       'border-width':2.5,'border-color':color('white')}},
-    {selector:'edge.hovered',style:{opacity:1,width:3.6}}
+    {selector:'edge.hovered',style:{opacity:1,width:3.6}},
+    ...classicLabels
   ],
   minZoom:.025,maxZoom:3.4,
   autoungrabify:true,autounselectify:true,boxSelectionEnabled:false
 });
 cy.edges().forEach(edge => { if (edge.parallelEdges().length > 1) edge.addClass('parallel'); });
 const updateGraphLabels = createGraphLabels(cy);
+const labelModeControl = $('label-mode');
+const labelModePreference = 'rock-atlas.label-mode';
+function applyLabelMode() {
+  const classic = labelModeControl.value === 'classic';
+  graph.classList.toggle('classic-labels',classic);
+  cy.batch(() => cy.nodes().toggleClass('classic-label',classic));
+  if (!classic) updateGraphLabels();
+}
+try {
+  if (localStorage.getItem(labelModePreference) === 'classic') labelModeControl.value = 'classic';
+} catch {}
+applyLabelMode();
+labelModeControl.addEventListener('change', () => {
+  applyLabelMode();
+  try { localStorage.setItem(labelModePreference,labelModeControl.value); } catch {}
+});
 
 function fitNetwork() {
   cy.resize();

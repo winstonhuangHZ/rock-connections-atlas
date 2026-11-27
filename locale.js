@@ -2,6 +2,7 @@ const strings = {
   en: {
     brand:'Rock Atlas',eyebrow:'ARCHIVAL CARTOGRAPHY · 1955–2026',title:'Rock Connections Atlas',subtitle:'Trace relationships through bands, recordings, and musical influence.',
     map:'Network',directory:'Index',paths:'Find a path',network:'Relationship network',
+    labelMode:'Labels',labelAdaptive:'Adaptive',labelClassic:'Classic',
     all:'All',artists:'People',bands:'Bands',indexTitle:'Artist and band index',pathTitle:'Find a connection',from:'From',to:'To',
     foot:'Sources are linked from each relationship. Image credits appear on profiles.',legend:'● Person   ◆ Band',
     relationType:'Relationship type',any:'Any relationship',zoomOut:'Zoom out',zoomIn:'Zoom in',fit:'Fit',search:'Search people or bands',placeholder:'Search Nico, Oasis, The Clash…',
@@ -17,6 +18,7 @@ const strings = {
   zh: {
     brand:'摇滚图谱',eyebrow:'摇滚史关系档案与图谱 · 1955–2026',title:'摇滚关系图谱',subtitle:'循着乐队、录音与音乐影响，探索摇滚史上的人物关系。',
     map:'关系图谱',directory:'人物索引',paths:'查找路径',network:'关系网络',
+    labelMode:'标签',labelAdaptive:'智能避让',labelClassic:'原版',
     all:'全部',artists:'人物',bands:'乐队',indexTitle:'人物与乐队索引',pathTitle:'查找两者之间的路径',from:'起点',to:'终点',
     foot:'关系附有出处。肖像署名见人物页。',legend:'● 人物   ◆ 乐队',
     relationType:'关系类型',any:'不限关系',zoomOut:'缩小',zoomIn:'放大',fit:'全图',search:'搜索人物或乐队',placeholder:'搜索 Nico、Oasis、披头士…',

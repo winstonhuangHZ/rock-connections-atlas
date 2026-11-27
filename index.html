@@ -10,7 +10,7 @@
   <title>Rock Connections Atlas</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="fonts/fonts.css">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
   <script defer src="catalog.js?v=2"></script>
   <script defer src="lineups.js?v=2"></script>
   <script defer src="connections.js?v=3"></script>
@@ -21,9 +21,9 @@
   <script defer src="vendor/cytoscape.min.js"></script>
   <script defer src="layout.js?v=3"></script>
   <script defer src="graph-layout.js"></script>
-  <script defer src="locale.js?v=3"></script>
+  <script defer src="locale.js?v=4"></script>
   <script defer src="graph-labels.js?v=6"></script>
-  <script defer src="app.js?v=9"></script>
+  <script defer src="app.js?v=10"></script>
 </head>
 <body>
   <header class="masthead">
@@ -64,7 +64,16 @@
               <h2 data-copy="network">Relationship network</h2>
               <span class="network-legend" data-copy="legend">● Person   ◆ Band</span>
             </div>
-            <span id="network-count" aria-live="polite"></span>
+            <div class="network-meta">
+              <span id="network-count" aria-live="polite"></span>
+              <label class="label-mode" for="label-mode">
+                <span data-copy="labelMode">Labels</span>
+                <select id="label-mode">
+                  <option value="adaptive" data-copy="labelAdaptive">Adaptive</option>
+                  <option value="classic" data-copy="labelClassic">Classic</option>
+                </select>
+              </label>
+            </div>
           </div>
           <div id="graph" class="graph" aria-label="可点击的音乐人关系图。也可通过搜索与人物索引访问所有条目。"></div>
           <div class="network-tools">
