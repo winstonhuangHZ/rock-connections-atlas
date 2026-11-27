@@ -2,7 +2,7 @@
 
 A bilingual, static graph of documented relationships in rock music. The initial view shows all nodes and edges. Select a node for its profile or an edge for the event and source. Search accepts English names and selected Chinese names and aliases. The path finder can restrict a search to one relationship type, including family.
 
-The current connectivity audit and its limitations are recorded in [`AUDIT.md`](AUDIT.md).
+The previous connectivity audit is recorded in [`AUDIT.md`](AUDIT.md). The latest findings, implementation phases, and acceptance checklist are in [`ROADMAP.md`](ROADMAP.md).
 
 ## Open or publish
 
